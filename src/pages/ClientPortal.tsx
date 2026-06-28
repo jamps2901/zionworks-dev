@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { SEOHead } from '@/components/SEOHead';
-import ClientLogin from '@/components/client/ClientLogin';
-import ClientDashboard from '@/components/client/ClientDashboard';
-import ClientOnboarding from '@/components/client/ClientOnboarding';
+import ClientLogin from '@/components/admin/ClientLogin';
+import ClientDashboard from '@/components/admin/ClientDashboard';
+import ClientOnboarding from '@/components/admin/ClientOnboarding';
 import { supabase } from '@/integrations/supabase/client';
 
 interface ClientData {
