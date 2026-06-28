@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Heart, Users, Zap, Target, Globe, Award } from 'lucide-react';
+import { Heart, Users, Zap, Target, Globe, Award, Hexagon, MapPin, Code, Coffee } from 'lucide-react';
 
 const About = () => {
   return (
@@ -21,7 +21,7 @@ const About = () => {
           </p>
         </motion.div>
 
-        {/* Story Section */}
+        {/* Founder Story */}
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -29,23 +29,30 @@ const About = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
+            <div className="inline-flex items-center px-4 py-2 bg-secondary/10 rounded-full text-secondary text-sm font-medium mb-6">
+              <MapPin className="w-4 h-4 mr-2" />
+              Piopio, King Country, New Zealand
+            </div>
             <h3 className="text-3xl font-bold text-foreground mb-6">
-              Our Humble <span className="text-gradient">Beginning</span>
+              Built by someone who <span className="text-gradient">actually lives this</span>
             </h3>
             <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
-                It started with a laptop, a kitchen table, and a simple belief: every New Zealand business, 
-                no matter how small or where they're located, deserves access to world-class technology.
+                I'm a beekeeper with 50 hives, a father of two young kids, and a developer who builds 
+                AI-powered web platforms from a rural property in Piopio. I'm not a faceless agency. 
+                I'm your neighbour.
               </p>
               <p>
-                Growing up in King Country, we saw firsthand how local businesses—the farm supply store, 
-                the family electrician, the corner café—struggled to compete in an increasingly digital world. 
-                Not because they lacked heart or skill, but because they lacked the right tools.
+                I built ZionWorks because I watched local businesses around King Country struggle 
+                to get online — not because they didn't want to, but because every agency they 
+                talked to was in Auckland, charged Auckland prices, and spoke in jargon no farmer 
+                or tradie has time for.
               </p>
               <p>
-                So we made it our mission to bridge that gap. From our base in the Waikato, we've grown 
-                from building simple websites to creating AI-powered automation systems that help local 
-                businesses thrive in the digital age.
+                When you work with me, you're not dealing with account managers or offshore developers. 
+                You're dealing with the person who answers your call, writes your code, and 
+                genuinely wants your business to grow — because I know what it's like to build 
+                something from scratch in rural NZ with everything on the line.
               </p>
             </div>
           </motion.div>
@@ -58,36 +65,49 @@ const About = () => {
             className="relative"
           >
             <div className="glass-card p-8 rounded-2xl">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-secondary to-accent rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Heart className="w-8 h-8 text-primary" />
+              <h4 className="text-lg font-semibold text-foreground mb-6 text-center">A day in my life</h4>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4 p-3 rounded-xl bg-secondary/5 hover:bg-secondary/10 transition-colors">
+                  <div className="w-10 h-10 bg-gradient-to-r from-secondary to-accent rounded-full flex items-center justify-center flex-shrink-0">
+                    <Hexagon className="w-5 h-5 text-primary" />
                   </div>
-                  <h4 className="font-semibold text-foreground">Local Focus</h4>
-                  <p className="text-sm text-muted-foreground">King Country roots</p>
+                  <div>
+                    <p className="font-medium text-foreground text-sm">6am — check the hives</p>
+                    <p className="text-xs text-muted-foreground">50 hives. Piopio. Rain or shine.</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-accent to-secondary rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Globe className="w-8 h-8 text-primary" />
+                <div className="flex items-center gap-4 p-3 rounded-xl bg-secondary/5 hover:bg-secondary/10 transition-colors">
+                  <div className="w-10 h-10 bg-gradient-to-r from-accent to-secondary rounded-full flex items-center justify-center flex-shrink-0">
+                    <Code className="w-5 h-5 text-primary" />
                   </div>
-                  <h4 className="font-semibold text-foreground">Global Tech</h4>
-                  <p className="text-sm text-muted-foreground">World-class solutions</p>
+                  <div>
+                    <p className="font-medium text-foreground text-sm">8am — building your site</p>
+                    <p className="text-xs text-muted-foreground">React, TypeScript, AI automation. The real stack.</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-secondary to-accent rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Users className="w-8 h-8 text-primary" />
+                <div className="flex items-center gap-4 p-3 rounded-xl bg-secondary/5 hover:bg-secondary/10 transition-colors">
+                  <div className="w-10 h-10 bg-gradient-to-r from-secondary to-accent rounded-full flex items-center justify-center flex-shrink-0">
+                    <Users className="w-5 h-5 text-primary" />
                   </div>
-                  <h4 className="font-semibold text-foreground">Community</h4>
-                  <p className="text-sm text-muted-foreground">Local businesses first</p>
+                  <div>
+                    <p className="font-medium text-foreground text-sm">3pm — school pickup</p>
+                    <p className="text-xs text-muted-foreground">Two kids. Because priorities are priorities.</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-accent to-secondary rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Zap className="w-8 h-8 text-primary" />
+                <div className="flex items-center gap-4 p-3 rounded-xl bg-secondary/5 hover:bg-secondary/10 transition-colors">
+                  <div className="w-10 h-10 bg-gradient-to-r from-accent to-secondary rounded-full flex items-center justify-center flex-shrink-0">
+                    <Coffee className="w-5 h-5 text-primary" />
                   </div>
-                  <h4 className="font-semibold text-foreground">Innovation</h4>
-                  <p className="text-sm text-muted-foreground">AI & automation</p>
+                  <div>
+                    <p className="font-medium text-foreground text-sm">8pm — client calls & code</p>
+                    <p className="text-xs text-muted-foreground">When the kids are in bed. This is the grind.</p>
+                  </div>
                 </div>
               </div>
+              <p className="text-xs text-center text-muted-foreground mt-6 italic">
+                "If I can build BarterMuse — a full AI trade platform — between hive checks,<br/>
+                imagine what I can build for your business."
+              </p>
             </div>
           </motion.div>
         </div>

@@ -8,7 +8,7 @@ import ChatBot from './ChatBot';
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [counts, setCounts] = useState({ clients: 0, satisfaction: 0, support: 0 });
+  const [counts, setCounts] = useState({ builds: 0, turnaround: 0, distance: 0 });
   const [typingText, setTypingText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -57,9 +57,9 @@ const Hero = () => {
           const progress = step / steps;
           
           setCounts({
-            clients: Math.round(50 * progress),
-            satisfaction: Math.round(99 * progress),
-            support: Math.round(24 * progress)
+            builds: Math.round(5 * progress),
+            turnaround: Math.round(14 * progress),
+            distance: Math.round(0 * progress)
           });
           
           if (step >= steps) clearInterval(counter);
@@ -163,8 +163,8 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            Zion Works builds world-class websites, mobile apps, and AI automation 
-            for Kiwi businesses who need real results, not just pretty designs.
+            Websites, apps, and AI automation for Kiwi businesses — built by a 
+            local who answers the phone, ships fast, and charges a fair price.
           </motion.p>
 
           {/* Interactive Input + CTA */}
@@ -227,14 +227,14 @@ const Hero = () => {
               transition={{ type: "spring", stiffness: 300 }}
             >
               <div className="flex items-center justify-center w-16 h-16 glass-card rounded-full mx-auto mb-4">
-                <Users className="w-8 h-8 text-secondary" />
+                <Zap className="w-8 h-8 text-secondary" />
               </div>
               <div className="text-3xl font-bold text-primary-foreground counter-animation">
-                {counts.clients}+
+                Piopio
               </div>
               <div className="text-primary-foreground/70 text-sm">
-                Local Businesses<br />
-                <span className="text-xs text-secondary">and growing every month</span>
+                Based in King Country<br />
+                <span className="text-xs text-secondary">serving all of NZ remotely</span>
               </div>
             </motion.div>
             
@@ -247,11 +247,11 @@ const Hero = () => {
                 <Award className="w-8 h-8 text-secondary" />
               </div>
               <div className="text-3xl font-bold text-primary-foreground counter-animation">
-                {counts.satisfaction}%
+                ~14 days
               </div>
               <div className="text-primary-foreground/70 text-sm">
-                Client Satisfaction<br />
-                <span className="text-xs text-secondary">based on project reviews</span>
+                Typical turnaround<br />
+                <span className="text-xs text-secondary">from brief to live site</span>
               </div>
             </motion.div>
             
@@ -261,14 +261,14 @@ const Hero = () => {
               transition={{ type: "spring", stiffness: 300 }}
             >
               <div className="flex items-center justify-center w-16 h-16 glass-card rounded-full mx-auto mb-4">
-                <Zap className="w-8 h-8 text-secondary" />
+                <Users className="w-8 h-8 text-secondary" />
               </div>
               <div className="text-3xl font-bold text-primary-foreground counter-animation">
-                {counts.support}/7
+                Direct
               </div>
               <div className="text-primary-foreground/70 text-sm">
-                Support Available<br />
-                <span className="text-xs text-secondary">rapid response guarantee</span>
+                You deal with the founder<br />
+                <span className="text-xs text-secondary">not an account manager</span>
               </div>
             </motion.div>
           </motion.div>

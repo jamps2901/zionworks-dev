@@ -27,56 +27,56 @@ const Services = () => {
   const defaultServices = [
     {
       id: 1,
+      title: "Tradie & Small Business Sites",
+      description: "A clean, mobile-first website that gets you found and gets the phone ringing. Real photos, contact form, Google Maps, and your brand colours — done for you in about two weeks.",
+      icon_url: "",
+      category: "Most Popular",
+      price: "From $950",
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 2,
+      title: "Online Presence Setup",
+      description: "Get found everywhere customers look. Google Business Profile, Facebook and Instagram set up properly, a starter content pack, and a 1-on-1 walkthrough so you can run it yourself.",
+      icon_url: "",
+      category: "Quick Win",
+      price: "From $350",
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 3,
       title: "Website Development",
-      description: "From simple brochure sites to complex e-commerce platforms. We build fast, responsive websites that convert visitors into customers.",
+      description: "From a polished brochure site to a full e-commerce store. Fast, responsive, SEO-ready, and built to turn visitors into paying customers — not just look pretty.",
       icon_url: "",
       category: "Development",
       price: "From $2,500",
       created_at: new Date().toISOString()
     },
     {
-      id: 2,
-      title: "Mobile Apps",
-      description: "Native iOS and Android apps, or cross-platform solutions. Perfect for businesses wanting to reach customers on-the-go.",
-      icon_url: "",
-      category: "Development",
-      price: "From $8,000",
-      created_at: new Date().toISOString()
-    },
-    {
-      id: 3,
-      title: "Custom Software",
-      description: "Bespoke software solutions tailored to your unique business needs. CRM, inventory management, booking systems, and more.",
+      id: 4,
+      title: "AI Automation & Custom Software",
+      description: "Booking systems, CRMs, inventory tools, and AI workflows that save you hours every week. The same stack I used to build BarterMuse — tailored to how your business actually runs.",
       icon_url: "",
       category: "Development",
       price: "From $5,000",
       created_at: new Date().toISOString()
     },
     {
-      id: 4,
-      title: "Coding Tutorials & Mentorship",
-      description: "One-on-one or group tutorials for beginners learning to code or build websites. Great for youth, students, or upskilling adults.",
-      icon_url: "",
-      category: "Education",
-      price: "From $45/session",
-      created_at: new Date().toISOString()
-    },
-    {
       id: 5,
-      title: "Tradie & Retail Site Packages",
-      description: "Affordable websites for tradespeople, shops, market sellers, or small service providers. Done-for-you packages with real photos, bookings, and contact form.",
+      title: "Mobile Apps",
+      description: "Native iOS and Android, or cross-platform builds that reach your customers wherever they are. Push notifications, offline support, and store submission handled end to end.",
       icon_url: "",
-      category: "Packages",
-      price: "From $950",
+      category: "Development",
+      price: "From $8,000",
       created_at: new Date().toISOString()
     },
     {
       id: 6,
-      title: "Online Presence & Social Setup",
-      description: "We help local businesses set up their full online presence — social media pages, Google Business, basic content & photos.",
+      title: "Coding Tutorials & Mentorship",
+      description: "One-on-one or small-group lessons for anyone learning to code or build websites — youth, students, or adults upskilling. Online or in-person around King Country.",
       icon_url: "",
-      category: "Marketing",
-      price: "From $350",
+      category: "Education",
+      price: "From $45/session",
       created_at: new Date().toISOString()
     }
   ];
