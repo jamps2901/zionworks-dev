@@ -11,7 +11,7 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import ChatBot from '@/components/ChatBot';
 import VoiceInterface from '@/components/VoiceInterface';
-import { useAnalytics } from '@/hooks/useAnalytics';
+import { useAnalytics } from '@/components/useAnalytics';
 
 const Index = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
