@@ -105,7 +105,17 @@ const About = () => {
                 </div>
               </div>
               <p className="text-xs text-center text-muted-foreground mt-6 italic">
-                "If I can build BarterMuse — a full AI trade platform — between hive checks,<br/>
+                "If I can build{' '}
+                <a
+                  href="https://shop.bartermuse.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-secondary underline underline-offset-2 hover:text-secondary/80 transition-colors not-italic font-semibold"
+                >
+                  BarterMuse
+                </a>
+                {' '}— a full AI trade platform — between hive checks,{' '}
+                <br className="hidden sm:block" />
                 imagine what I can build for your business."
               </p>
             </div>

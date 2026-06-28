@@ -8,7 +8,6 @@ import ChatBot from './ChatBot';
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [counts, setCounts] = useState({ builds: 0, turnaround: 0, distance: 0 });
   const [typingText, setTypingText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -42,33 +41,6 @@ const Hero = () => {
       clearInterval(typingInterval);
     };
   }, []);
-
-  // Counter animation
-  useEffect(() => {
-    if (isInView) {
-      const animateCounters = () => {
-        const duration = 2000;
-        const steps = 60;
-        const increment = duration / steps;
-        
-        let step = 0;
-        const counter = setInterval(() => {
-          step++;
-          const progress = step / steps;
-          
-          setCounts({
-            builds: Math.round(5 * progress),
-            turnaround: Math.round(14 * progress),
-            distance: Math.round(0 * progress)
-          });
-          
-          if (step >= steps) clearInterval(counter);
-        }, increment);
-      };
-      
-      animateCounters();
-    }
-  }, [isInView]);
 
   const parallaxOffset = scrollY * 0.5;
 

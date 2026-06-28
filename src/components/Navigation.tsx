@@ -228,17 +228,6 @@ const Navigation = () => {
                     Book Call
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="w-full text-muted-foreground hover:text-foreground"
-                    onClick={() => {
-                      window.location.href = '/admin';
-                      setIsOpen(false);
-                    }}
-                  >
-                    Admin
-                  </Button>
                 </motion.div>
               </div>
             </motion.div>

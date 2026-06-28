@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Globe, Smartphone, GraduationCap, Hammer, Building2, Users, X, Check } from 'lucide-react';
+import { Globe, Smartphone, GraduationCap, Hammer, Building2, Users, X, Check, Star, Zap as ZapIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
@@ -318,13 +318,44 @@ const Services = () => {
           </p>
         </div>
 
+        {/* BarterMuse proof bar */}
+        <div className="flex items-center justify-center gap-3 mb-10 p-4 rounded-2xl bg-secondary/10 border border-secondary/20 max-w-2xl mx-auto">
+          <div className="w-2 h-2 bg-secondary rounded-full animate-pulse flex-shrink-0" />
+          <p className="text-sm text-center text-muted-foreground">
+            <strong className="text-foreground">Live proof:</strong>{' '}
+            <a
+              href="https://shop.bartermuse.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-secondary underline underline-offset-2 hover:text-secondary/80 transition-colors"
+            >
+              BarterMuse
+            </a>{' '}
+            — an AI-powered local trade platform — was built on this same stack, from Piopio, between hive checks.
+          </p>
+        </div>
+
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {services.map((service) => {
             const features = getServiceFeatures(service.title, service.category);
+            const isMostPopular = service.category === 'Most Popular';
+            const isQuickWin = service.category === 'Quick Win';
             return (
-              <div key={service.id} className="card-feature group">
-                <div className="flex items-center mb-6">
+              <div key={service.id} className={`card-feature group relative ${isMostPopular ? 'ring-2 ring-secondary/60' : ''}`}>
+                {(isMostPopular || isQuickWin) && (
+                  <div className="absolute -top-3 left-4">
+                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
+                      isMostPopular
+                        ? 'bg-secondary text-primary'
+                        : 'bg-accent/80 text-primary'
+                    }`}>
+                      {isMostPopular ? <Star className="w-3 h-3" /> : <ZapIcon className="w-3 h-3" />}
+                      {service.category}
+                    </span>
+                  </div>
+                )}
+                <div className="flex items-center mb-6 mt-2">
                   <div className="flex items-center justify-center w-16 h-16 bg-gradient-secondary rounded-xl mr-4 group-hover:scale-110 transition-transform duration-300">
                     <div className="text-primary">
                       {service.icon_url ? (
