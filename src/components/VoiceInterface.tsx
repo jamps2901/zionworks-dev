@@ -19,8 +19,6 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onMes
   const chatRef = useRef<RealtimeChat | null>(null);
 
   const handleMessage = (event: any) => {
-    console.log('🎙️ Voice event:', event);
-    
     // Handle different event types
     if (event.type === 'response.audio.delta') {
       setIsSpeaking(true);
@@ -44,12 +42,9 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange, onMes
   const startConversation = async () => {
     setIsConnecting(true);
     try {
-      console.log('🎙️ Starting voice conversation...');
-      
       // Request microphone permission first
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      console.log('🎤 Microphone permission granted');
-      
+
       chatRef.current = new RealtimeChat(handleMessage);
       await chatRef.current.init();
       setIsConnected(true);

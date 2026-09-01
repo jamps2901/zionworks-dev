@@ -11,9 +11,9 @@ interface TeamMember {
   id: string;
   member_name: string;
   role: string;
-  email?: string;
-  phone?: string;
-  is_primary_contact: boolean;
+  email?: string | null;
+  phone?: string | null;
+  is_primary_contact: boolean | null;
 }
 
 interface TeamPanelProps {

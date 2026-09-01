@@ -73,8 +73,6 @@ export class RealtimeChat {
 
   async init() {
     try {
-      console.log('🔄 Initializing realtime chat...');
-      
       // Get ephemeral token from our Supabase Edge Function
       const response = await fetch('https://msiwikblmajmtqperugi.supabase.co/functions/v1/realtime-chat', {
         method: 'POST',
@@ -91,15 +89,13 @@ export class RealtimeChat {
       }
       
       const data = await response.json();
-      console.log('✅ Received ephemeral token response:', data);
-      
+
       if (!data.client_secret?.value) {
         console.error('❌ No client secret in response:', data);
         throw new Error("Failed to get ephemeral token - no client secret returned");
       }
 
       const EPHEMERAL_KEY = data.client_secret.value;
-      console.log('🔑 Got ephemeral key, creating WebRTC connection...');
 
       // Create peer connection
       this.pc = new RTCPeerConnection();
@@ -115,7 +111,6 @@ export class RealtimeChat {
       this.dc = this.pc.createDataChannel("oai-events");
       this.dc.addEventListener("message", (e) => {
         const event = JSON.parse(e.data);
-        console.log("Received event:", event);
         this.onMessage(event);
       });
 
@@ -141,7 +136,6 @@ export class RealtimeChat {
       };
       
       await this.pc.setRemoteDescription(answer);
-      console.log("WebRTC connection established");
 
       // Start recording
       this.recorder = new AudioRecorder((audioData) => {

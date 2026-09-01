@@ -8,11 +8,11 @@ import { useToast } from '@/hooks/use-toast';
 
 interface Service {
   id: number;
-  title: string;
-  description: string;
-  icon_url: string;
-  category: string;
-  price: string;
+  title: string | null;
+  description: string | null;
+  icon_url: string | null;
+  category: string | null;
+  price: string | null;
   created_at: string;
 }
 
@@ -84,10 +84,6 @@ const Services = () => {
   useEffect(() => {
     fetchServices();
   }, []);
-
-  useEffect(() => {
-    console.log('Dialog state changed:', { dialogOpen, selectedService: selectedService?.title });
-  }, [dialogOpen, selectedService]);
 
   const fetchServices = async () => {
     try {
@@ -284,11 +280,8 @@ const Services = () => {
   };
 
   const openServiceModal = (service: Service) => {
-    console.log('Opening modal for service:', service.title);
-    console.log('Dialog open state before:', dialogOpen);
     setSelectedService(service);
     setDialogOpen(true);
-    console.log('Selected service set to:', service);
   };
 
   if (loading) {
@@ -386,10 +379,7 @@ const Services = () => {
 
                 <Button 
                   className="btn-outline w-full"
-                  onClick={() => {
-                    console.log('Button clicked for service:', service.title);
-                    openServiceModal(service);
-                  }}
+                  onClick={() => openServiceModal(service)}
                 >
                   Learn More
                 </Button>

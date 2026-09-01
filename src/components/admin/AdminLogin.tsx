@@ -50,10 +50,6 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
         setCredentials(prev => ({ ...prev, password: '' }));
       } else {
         // Success
-        localStorage.setItem('zionworks_admin_authenticated', 'true');
-        localStorage.setItem('zionworks_admin_email', credentials.email.trim().toLowerCase());
-        localStorage.setItem('zionworks_admin_login_time', new Date().toISOString());
-        
         onLogin(true, credentials.email.trim().toLowerCase());
         
         toast({

@@ -8,11 +8,11 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface ClientData {
   id: string;
-  company_name: string;
+  company_name: string | null;
   contact_name: string;
-  email: string;
-  phone?: string;
-  has_completed_onboarding: boolean;
+  email?: string;
+  phone?: string | null;
+  has_completed_onboarding: boolean | null;
 }
 
 const ClientPortal = () => {

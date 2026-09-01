@@ -142,9 +142,6 @@ const AdminSettings = ({ adminEmail }: AdminSettingsProps) => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    localStorage.removeItem('zionworks_admin_authenticated');
-    localStorage.removeItem('zionworks_admin_email');
-    localStorage.removeItem('zionworks_admin_login_time');
     window.location.href = '/admin';
   };
 

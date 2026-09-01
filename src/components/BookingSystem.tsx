@@ -20,7 +20,7 @@ const BookingSystem = () => {
 
   // Generate available time slots for the next 30 days
   const generateTimeSlots = () => {
-    const slots = [];
+    const slots: { datetime: string; display: string }[] = [];
     const today = new Date();
     
     for (let i = 1; i <= 30; i++) {

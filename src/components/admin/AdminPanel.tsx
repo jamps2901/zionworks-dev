@@ -41,7 +41,7 @@ const AdminPanelContent = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isAuthenticated, isLoading, signOut, user } = useAdminAuth();
   
-  const adminEmail = user?.email || localStorage.getItem('zionworks_admin_email') || 'Admin';
+  const adminEmail = user?.email || 'Admin';
 
   const handleLogin = (authenticated: boolean, email?: string) => {
     if (authenticated) {

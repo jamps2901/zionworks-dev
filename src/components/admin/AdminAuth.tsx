@@ -71,9 +71,6 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    localStorage.removeItem('zionworks_admin_authenticated');
-    localStorage.removeItem('zionworks_admin_email');
-    localStorage.removeItem('zionworks_admin_login_time');
   };
 
   const isAuthenticated = !!session && !!user;

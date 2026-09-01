@@ -42,23 +42,23 @@ interface ProjectViewerProps {
 interface ProjectStage {
   id: string;
   stage_name: string;
-  stage_description: string;
-  status: string;
-  progress_percentage: number;
-  due_date: string;
-  assigned_team_members: string[];
-  client_approval: 'pending' | 'approved' | 'rejected' | 'revision_requested';
-  approval_notes: string;
-  approved_at: string;
+  stage_description: string | null;
+  status: string | null;
+  progress_percentage: number | null;
+  due_date: string | null;
+  assigned_team_members: string[] | null;
+  client_approval: 'pending' | 'approved' | 'rejected' | 'revision_requested' | null;
+  approval_notes: string | null;
+  approved_at: string | null;
 }
 
 interface TeamMember {
   id: string;
   member_name: string;
   role: string;
-  email: string;
-  phone: string;
-  is_primary_contact: boolean;
+  email: string | null;
+  phone: string | null;
+  is_primary_contact: boolean | null;
 }
 
 interface ProjectMessage {
@@ -66,17 +66,17 @@ interface ProjectMessage {
   sender_name: string;
   sender_type: string;
   message_text: string;
-  created_at: string;
-  stage_context?: string;
+  created_at: string | null;
+  stage_context?: string | null;
 }
 
 interface ProjectFile {
   id: string;
   file_name: string;
   uploaded_by_type: string;
-  file_size: number;
-  created_at: string;
-  description: string;
+  file_size: number | null;
+  created_at: string | null;
+  description: string | null;
 }
 
 const ProjectViewer = ({ projectId, clientName, onClose }: ProjectViewerProps) => {
@@ -194,8 +194,8 @@ const ProjectViewer = ({ projectId, clientName, onClose }: ProjectViewerProps) =
     try {
       const { error } = await supabase.rpc('update_project_stage_details', {
         p_stage_id: stage.id,
-        p_stage_description: stage.stage_description,
-        p_due_date: stage.due_date || null,
+        p_stage_description: stage.stage_description ?? undefined,
+        p_due_date: stage.due_date ?? undefined,
         p_assigned_team_members: stage.assigned_team_members,
         p_progress_percentage: stage.progress_percentage
       });
@@ -232,8 +232,8 @@ const ProjectViewer = ({ projectId, clientName, onClose }: ProjectViewerProps) =
         p_project_id: projectId,
         p_member_name: newTeamMember.member_name,
         p_role: newTeamMember.role,
-        p_email: newTeamMember.email || null,
-        p_phone: newTeamMember.phone || null,
+        p_email: newTeamMember.email || undefined,
+        p_phone: newTeamMember.phone || undefined,
         p_is_primary_contact: newTeamMember.is_primary_contact
       });
 
