@@ -27,7 +27,7 @@ const handler = async (req: Request): Promise<Response> => {
     const { clientEmail, clientName, companyName, projectType, projectDescription, loginUrl }: ClientWelcomeRequest = await req.json();
 
     const emailResponse = await resend.emails.send({
-      from: "ZionWorks Team <onboarding@resend.dev>",
+      from: "ZionWorks Team <noreply@zionworks.dev>",
       to: [clientEmail],
       subject: `Welcome to ZionWorks - Your ${projectType} Project is Ready!`,
       html: `
@@ -77,7 +77,7 @@ const handler = async (req: Request): Promise<Response> => {
             
             <div style="border-top: 1px solid #e2e8f0; padding-top: 20px; margin-top: 30px;">
               <p><strong>Questions or need help?</strong></p>
-              <p>Contact your project manager or email us at <a href="mailto:hello@zionworks.com" style="color: #2563eb;">hello@zionworks.com</a></p>
+              <p>Contact your project manager or email us at <a href="mailto:contactus@zionworks.dev" style="color: #2563eb;">contactus@zionworks.dev</a></p>
               <p>Phone: <a href="tel:+1234567890" style="color: #2563eb;">+1 (234) 567-8900</a></p>
             </div>
             

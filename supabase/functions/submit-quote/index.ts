@@ -82,7 +82,7 @@ serve(async (req) => {
           <li>We can schedule a free consultation call if needed</li>
         </ul>
         
-        <p>Questions? Reply to this email or call us at <a href="tel:+64271234567">+64 27 123 4567</a></p>
+        <p>Questions? Reply to this email or call us at <a href="tel:+64223536095">+64 22 353 6095</a></p>
         
         <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
           <p style="color: #6b7280;">Zion Works - Digital Solutions for Kiwi Businesses</p>
@@ -92,7 +92,7 @@ serve(async (req) => {
     `;
 
     const { error: customerEmailError } = await resend.emails.send({
-      from: "Zion Works <onboarding@resend.dev>",
+      from: "Zion Works <noreply@zionworks.dev>",
       to: [quoteData.email],
       subject: "Your Quote Request - We'll be in touch soon!",
       html: customerEmailHtml,
@@ -132,7 +132,7 @@ serve(async (req) => {
     `;
 
     const { error: adminEmailError } = await resend.emails.send({
-      from: "Zion Works <onboarding@resend.dev>",
+      from: "Zion Works <noreply@zionworks.dev>",
       to: ["jrpatnugot29@gmail.com"], // Using your email for now
       subject: `🚨 New Quote Request from ${quoteData.name}`,
       html: adminEmailHtml,

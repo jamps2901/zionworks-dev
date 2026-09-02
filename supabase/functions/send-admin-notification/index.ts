@@ -27,7 +27,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (type === 'new_client_intake') {
       const emailResponse = await resend.emails.send({
-        from: "ZionWorks Admin <onboarding@resend.dev>",
+        from: "ZionWorks Admin <noreply@zionworks.dev>",
         to: ["jrpatnugot29@gmail.com"], // Admin email
         subject: `New Client Intake Request - ${company_name}`,
         html: `

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ExternalLink, Github, Calendar, ArrowRight, X, Users, Clock, Target, CheckCircle } from 'lucide-react';
+import { ExternalLink, ArrowRight, Users, Clock, Target, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Import project screenshots
@@ -22,16 +22,13 @@ interface Project {
   category: string;
   technologies: string[];
   liveUrl?: string;
-  githubUrl?: string;
-  completedDate: string;
+  isLive: boolean;
   detailedInfo: {
     overview: string;
-    challenge: string;
-    solution: string;
-    results: string[];
+    approach: string;
+    capabilities: string[];
     features: string[];
     timeline: string;
-    teamSize: string;
     clientType: string;
   };
 }
@@ -40,200 +37,179 @@ const Portfolio = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  // Portfolio projects data with real case studies
+  // One real, live product (BarterMuse), plus concept builds showing range of capability.
+  // None of the concept entries are past clients -- they're honest demonstrations of
+  // what gets built for each type of business, not fabricated case studies.
   const projects: Project[] = [
     {
       id: 1,
-      title: "King Country Electrical Services",
-      description: "Modern website redesign for local electrician featuring online booking, service calculator, and customer portal. Transformed their digital presence from zero to hero.",
-      image: electricianImg,
-      category: "Local Business",
-      technologies: ["React", "TypeScript", "Supabase", "Stripe"],
-      completedDate: "2024-01-15",
+      title: "BarterMuse",
+      description: "A real, live AI-powered local trade platform -- built end to end on this same stack. Not a demo: it's shipped, running, and actually used.",
+      image: aiChatbotImg,
+      category: "Live Product",
+      technologies: ["React", "TypeScript", "Supabase", "AI"],
+      liveUrl: "https://shop.bartermuse.app",
+      isLive: true,
       detailedInfo: {
-        overview: "Complete digital transformation for Mike Thompson's electrical business in Te Kuiti. From a basic Facebook page to a comprehensive business platform that drives bookings.",
-        challenge: "Mike was losing customers to Hamilton-based electricians with professional websites. He relied entirely on word-of-mouth and struggled with scheduling conflicts from phone-only bookings.",
-        solution: "We built a modern, SEO-optimized website with integrated booking system, service calculator for instant quotes, customer portal for job tracking, and automated email sequences for follow-ups.",
-        results: [
-          "300% increase in online bookings within 3 months",
-          "Reduced phone call volume by 60% through self-service options",
-          "Expanded service area to Hamilton and Cambridge",
-          "Average job value increased by 25% through professional presentation"
+        overview: "BarterMuse is a local barter and trade platform with AI-powered value guidance, local match radar, and a full trade workspace -- built solo, from Piopio, between hive checks. It's the clearest proof of what this stack can actually ship.",
+        approach: "Full-stack build from concept to live product: AI valuation logic, matching system, and a real transactional workspace, deployed and running today.",
+        capabilities: [
+          "AI-assisted value estimation for trade items",
+          "Local match discovery between traders",
+          "A working trade negotiation workspace",
+          "Live, deployed, and publicly accessible right now"
         ],
         features: [
-          "Real-time booking calendar with SMS confirmations",
-          "Service calculator for instant electrical quotes",
-          "Customer portal for job progress tracking",
-          "Local SEO optimization for King Country searches",
-          "Mobile-responsive design for on-site access",
-          "Automated email marketing for customer retention"
+          "AI value guidance engine",
+          "Local Trade Intelligence matching",
+          "Real-time trade workspace",
+          "Built and shipped by one person"
         ],
-        timeline: "8 weeks",
-        teamSize: "2 developers + 1 SEO specialist",
-        clientType: "Local Tradesperson"
+        timeline: "Live product",
+        clientType: "Original Product"
       }
     },
     {
       id: 2,
-      title: "Te Kuiti Farm Supply E-commerce",
-      description: "Complete e-commerce transformation for agricultural supplies with inventory sync, delivery tracking, and farmer account system. Doubled revenue in first year.",
-      image: farmAppImg,
-      category: "E-commerce",
-      technologies: ["Next.js", "PostgreSQL", "Stripe", "SendGrid"],
-      completedDate: "2023-11-22",
+      title: "Tradie & Local Service Sites",
+      description: "The kind of site a sparky, plumber, or builder actually needs: booking, a service calculator, and a way to look credible against Hamilton-based competitors.",
+      image: electricianImg,
+      category: "Concept Build",
+      technologies: ["React", "TypeScript", "Supabase"],
+      isLive: false,
       detailedInfo: {
-        overview: "Sarah Mitchell's farm supply store needed to compete with online agricultural retailers. We built a comprehensive e-commerce platform that serves farmers across the greater Waikato region.",
-        challenge: "Local farmers were ordering supplies online from Auckland-based competitors instead of supporting the local business. The store had great products but no online presence for ordering.",
-        solution: "Custom e-commerce platform with farmer-specific features: bulk ordering, seasonal product recommendations, delivery route optimization, and integrated inventory management with their existing POS system.",
-        results: [
-          "200% revenue growth in first 12 months",
-          "Reduced order processing time by 75%",
-          "Expanded customer base to include Rotorua and Taupo farmers",
-          "Inventory turnover improved by 40% through better demand forecasting"
+        overview: "A concept build showing what a modern trade business site looks like -- built to demonstrate the kind of Tradie & Small Business package listed under Services, not a real past client.",
+        approach: "Mobile-first design, a booking flow that replaces phone-tag, and an instant service calculator so a quote doesn't require a callback.",
+        capabilities: [
+          "Real-time booking calendar",
+          "Instant service/quote calculator",
+          "Mobile-first layout for on-site use",
+          "Local SEO structure"
         ],
         features: [
-          "Bulk ordering system with quantity discounts",
-          "Seasonal product recommendations based on farming calendar",
-          "Delivery route optimization for rural areas",
-          "Farmer account system with credit terms",
-          "Integration with existing MYOB inventory system",
-          "Mobile app for on-farm ordering"
+          "Booking calendar with confirmations",
+          "Service calculator",
+          "Customer job-progress view",
+          "Mobile-responsive design"
         ],
-        timeline: "14 weeks",
-        teamSize: "3 developers + 1 agricultural consultant",
-        clientType: "Agricultural Retailer"
+        timeline: "~2 weeks typical",
+        clientType: "Concept -- Trade & Local Service"
       }
     },
     {
       id: 3,
-      title: "Hamilton Property Group",
-      description: "Premium real estate platform with virtual tours, property management dashboard, and automated client communication. Increased sales velocity by 60%.",
-      image: realEstateImg,
-      category: "Real Estate",
-      technologies: ["React", "Node.js", "MongoDB", "Mapbox"],
-      completedDate: "2023-12-08",
+      title: "Farm & Rural Supply E-commerce",
+      description: "An online ordering concept for a rural supply business -- built to show how a local retailer competes with big-city online competitors without losing the personal relationship.",
+      image: farmAppImg,
+      category: "Concept Build",
+      technologies: ["React", "Supabase", "Stripe"],
+      isLive: false,
       detailedInfo: {
-        overview: "David Chen's property group needed to differentiate themselves in Hamilton's competitive real estate market. We created a premium digital experience that positions them as the tech-forward choice.",
-        challenge: "Competing against established agencies with larger marketing budgets. Needed to showcase properties more effectively and provide better service to both buyers and sellers in the Hamilton market.",
-        solution: "Comprehensive real estate platform with virtual tour integration, advanced property search with Mapbox integration, automated valuation tools, and client portal for transparent communication throughout the sales process.",
-        results: [
-          "60% faster property sales through better lead qualification",
-          "80% more qualified leads from improved online presence",
-          "Expanded market share in Hamilton East and Hillcrest areas",
-          "Client satisfaction score improved to 4.9/5 stars"
+        overview: "A concept build exploring what a farm/rural supply store's online ordering system could look like -- not a real past client, but the kind of build available under AI Automation & Custom Software.",
+        approach: "Bulk ordering, seasonal recommendations, and delivery-route thinking built for how rural buyers actually order.",
+        capabilities: [
+          "Bulk ordering with quantity pricing",
+          "Seasonal product suggestions",
+          "Delivery-area aware ordering",
+          "Account-based repeat ordering"
         ],
         features: [
-          "Interactive property maps with neighborhood insights",
-          "Virtual tour integration with 360-degree photography",
-          "Automated property valuation using local market data",
-          "Client portal with real-time sales progress tracking",
-          "Lead scoring system for prioritizing follow-ups",
-          "Mobile-optimized property browsing experience"
+          "Bulk ordering flow",
+          "Seasonal recommendation logic",
+          "Farmer account system",
+          "Mobile ordering"
         ],
-        timeline: "12 weeks",
-        teamSize: "2 full-stack developers + 1 UX designer",
-        clientType: "Real Estate Agency"
+        timeline: "~10-14 weeks typical",
+        clientType: "Concept -- Rural Retail"
       }
     },
     {
       id: 4,
-      title: "Otorohanga Restaurant Chain",
-      description: "Multi-location restaurant management system with online ordering, kitchen display systems, and customer loyalty program. Streamlined operations across 3 locations.",
-      image: restaurantImg,
-      category: "Hospitality",
-      technologies: ["Vue.js", "Express", "PostgreSQL", "Redis"],
-      completedDate: "2023-10-12",
+      title: "Property & Real Estate Platform",
+      description: "A concept for a real estate presence built to compete on experience, not just listings -- virtual tours, an interactive map, and a client-facing sales tracker.",
+      image: realEstateImg,
+      category: "Concept Build",
+      technologies: ["React", "Node.js", "Mapbox"],
+      isLive: false,
       detailedInfo: {
-        overview: "Lisa Wang's restaurant group needed to unify operations across their three locations in Otorohanga, Te Kuiti, and Hamilton. We built an integrated system that treats all locations as one cohesive business.",
-        challenge: "Managing three separate restaurant locations with different systems was causing operational headaches. Online ordering was handled by expensive third-party apps that charged high commissions.",
-        solution: "Unified restaurant management platform with centralized ordering, kitchen display systems for each location, integrated POS, customer loyalty program, and real-time analytics dashboard for all locations.",
-        results: [
-          "45% increase in online orders across all locations",
-          "25% improvement in kitchen efficiency through digital ordering",
-          "Eliminated third-party delivery app fees (saving $40k annually)",
-          "Customer loyalty program drove 35% repeat business increase"
+        overview: "A concept build demonstrating a premium real estate platform -- shown as an example of the Website Development package, not a real past client.",
+        approach: "Interactive property maps, virtual tour integration, and a transparent client portal so buyers and sellers aren't left guessing.",
+        capabilities: [
+          "Interactive property maps",
+          "Virtual tour integration",
+          "Automated valuation tooling",
+          "Client-facing sales tracker"
         ],
         features: [
-          "Multi-location online ordering with pickup/delivery options",
-          "Kitchen display systems with order prioritization",
-          "Unified customer database across all locations",
-          "Loyalty program with points and rewards",
-          "Real-time analytics dashboard for all locations",
-          "Staff scheduling and performance tracking"
+          "Neighbourhood-aware map search",
+          "360-degree tour support",
+          "Sales progress portal",
+          "Mobile browsing experience"
         ],
-        timeline: "16 weeks",
-        teamSize: "4 developers + 1 hospitality consultant",
-        clientType: "Multi-location Restaurant Group"
+        timeline: "~8-12 weeks typical",
+        clientType: "Concept -- Real Estate"
       }
     },
     {
       id: 5,
-      title: "Waitomo Tourism AI Assistant",
-      description: "Intelligent chatbot system for tourism operator handling 24/7 customer inquiries, booking modifications, and personalized cave tour recommendations.",
-      image: aiChatbotImg,
-      category: "AI Solution",
-      technologies: ["OpenAI", "Python", "FastAPI", "React"],
-      completedDate: "2024-02-28",
+      title: "Multi-Location Hospitality System",
+      description: "A concept for a small hospitality group juggling multiple locations -- unified ordering, kitchen display, and loyalty, without the cut third-party delivery apps take.",
+      image: restaurantImg,
+      category: "Concept Build",
+      technologies: ["React", "Supabase", "Stripe"],
+      isLive: false,
       detailedInfo: {
-        overview: "Mark Stevens' tourism operation at Waitomo Caves needed 24/7 customer support to handle international visitors in different time zones. We built an AI assistant that handles complex tourism inquiries intelligently.",
-        challenge: "International tourists expect instant responses for booking inquiries and tour information, but the small team couldn't provide 24/7 support. Many potential bookings were lost due to delayed responses.",
-        solution: "AI-powered customer service system trained specifically on Waitomo tourism data, integrated with booking systems, capable of handling complex multi-tour itineraries and weather-dependent activity recommendations.",
-        results: [
-          "90% reduction in after-hours missed inquiries",
-          "70% improvement in customer satisfaction scores",
-          "30% increase in multi-tour bookings through intelligent upselling",
-          "Saved equivalent of 2 full-time customer service positions"
+        overview: "A concept build showing how a small multi-location hospitality business could unify operations under one system -- not a real past client, an example of what AI Automation & Custom Software covers.",
+        approach: "Centralised ordering and kitchen display across locations, with a loyalty system that avoids ongoing third-party delivery fees.",
+        capabilities: [
+          "Multi-location online ordering",
+          "Kitchen display integration",
+          "Unified customer loyalty",
+          "No per-order third-party fees"
         ],
         features: [
-          "Natural language processing for tourism inquiries",
-          "Real-time integration with booking calendar",
-          "Weather-aware activity recommendations",
-          "Multi-language support for international visitors",
-          "Intelligent escalation to human agents",
-          "Booking modification and cancellation handling"
+          "Pickup/delivery ordering",
+          "Kitchen display prioritisation",
+          "Loyalty points system",
+          "Cross-location dashboard"
         ],
-        timeline: "10 weeks",
-        teamSize: "2 AI specialists + 1 tourism industry expert",
-        clientType: "Tourism Operator"
+        timeline: "~12-16 weeks typical",
+        clientType: "Concept -- Hospitality"
       }
     },
     {
       id: 6,
-      title: "Taumarunui Trading Co.",
-      description: "Modern e-commerce rebuild for established local retail business with integrated POS, inventory sync, and customer analytics dashboard. 150% online revenue growth.",
+      title: "AI Customer Assistant Concept",
+      description: "A concept AI assistant for a tourism or service operator needing after-hours coverage -- the same category of tool now offered as a monthly bolt-on for any existing site.",
       image: ecommerceImg,
-      category: "Retail",
-      technologies: ["Shopify Plus", "React", "GraphQL", "Klaviyo"],
-      completedDate: "2023-09-15",
+      category: "Concept Build",
+      technologies: ["OpenAI", "Supabase", "React"],
+      isLive: false,
       detailedInfo: {
-        overview: "Jenny Taylor's family business needed to bridge the gap between their established physical store and the digital marketplace. We created a unified retail experience that honors their 40-year local legacy.",
-        challenge: "Fourth-generation family business was losing younger customers to online shopping. Their website hadn't been updated in years and wasn't integrated with their physical store operations.",
-        solution: "Complete digital transformation with modern e-commerce platform that syncs with in-store inventory, unified customer profiles across channels, and email marketing automation that drives both online and in-store sales.",
-        results: [
-          "150% online revenue growth in first 6 months",
-          "30% improvement in inventory turnover through better demand visibility",
-          "Reduced stock-outs by 60% through integrated inventory management",
-          "25% of online customers now also visit the physical store"
+        overview: "A concept build showing an AI assistant handling customer inquiries after-hours -- the same underlying capability now available as the AI Widget add-on for businesses that already have a website.",
+        approach: "An AI assistant trained on a business's own services and FAQs, available 24/7, with a clean handoff to a human when it's out of its depth.",
+        capabilities: [
+          "24/7 automated first response",
+          "Business-specific knowledge",
+          "Booking-aware conversation",
+          "Escalation to a real person when needed"
         ],
         features: [
-          "Real-time inventory sync between online and physical store",
-          "Unified customer profiles for omnichannel experience",
-          "Click-and-collect system for online orders",
-          "Email marketing automation with local event integration",
-          "Customer analytics dashboard for buying pattern insights",
-          "Mobile-optimized shopping experience"
+          "Natural-language chat",
+          "Booking-calendar awareness",
+          "Multi-topic handling",
+          "Human escalation path"
         ],
-        timeline: "12 weeks",
-        teamSize: "2 e-commerce specialists + 1 retail consultant",
-        clientType: "Local Retail Business"
+        timeline: "~1-2 weeks to add to an existing site",
+        clientType: "Concept -- AI Add-On"
       }
     }
   ];
 
   const categories = ['all', ...Array.from(new Set(projects.map(p => p.category)))];
 
-  const filteredProjects = selectedCategory === 'all' 
-    ? projects 
+  const filteredProjects = selectedCategory === 'all'
+    ? projects
     : projects.filter(p => p.category === selectedCategory);
 
   return (
@@ -241,24 +217,25 @@ const Portfolio = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.h2 
+          <motion.h2
             className="text-4xl md:text-5xl font-bold text-primary mb-6"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            Our <span className="text-gradient">Portfolio</span>
+            What I Can <span className="text-gradient">Build</span>
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-xl text-muted-foreground max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Real projects for real Kiwi businesses. See how we've helped our clients 
-            grow their digital presence and streamline their operations.
+            BarterMuse is a real, live product I built and shipped. Everything else here
+            is an honest concept build showing the kind of work available under Services --
+            not past clients, just proof of what's possible.
           </motion.p>
         </div>
 
@@ -295,7 +272,7 @@ const Portfolio = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="card-feature group h-full">
+              <Card className={`card-feature group h-full ${project.isLive ? 'ring-2 ring-secondary/60' : ''}`}>
                 {/* Project Image */}
                 <div className="relative overflow-hidden rounded-t-xl bg-gradient-subtle aspect-video">
                   <img
@@ -305,7 +282,10 @@ const Portfolio = () => {
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute top-3 right-3">
-                    <Badge variant="secondary">{project.category}</Badge>
+                    <Badge variant="secondary" className={project.isLive ? 'gap-1' : ''}>
+                      {project.isLive && <Sparkles className="w-3 h-3" />}
+                      {project.category}
+                    </Badge>
                   </div>
                 </div>
 
@@ -329,31 +309,40 @@ const Portfolio = () => {
                     </div>
                   </div>
 
-                  {/* Completed Date */}
+                  {/* Status line */}
                   <div className="mb-4">
                     <p className="text-xs text-muted-foreground flex items-center">
-                      <Calendar className="w-3 h-3 mr-1" />
-                      Completed: {new Date(project.completedDate).toLocaleDateString('en-NZ')}
+                      {project.isLive ? (
+                        <>
+                          <Sparkles className="w-3 h-3 mr-1 text-secondary" />
+                          Live product -- try it yourself
+                        </>
+                      ) : (
+                        <>
+                          <Target className="w-3 h-3 mr-1" />
+                          Concept build, not a past client
+                        </>
+                      )}
                     </p>
                   </div>
 
                   {/* Action Buttons */}
                   <div className="flex gap-2">
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       className="btn-secondary flex-1"
                       onClick={() => setSelectedProject(project)}
                     >
                       <ExternalLink className="w-3 h-3 mr-1" />
                       View Details
                     </Button>
-                    {project.githubUrl && (
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => window.open(project.githubUrl, '_blank')}
+                    {project.liveUrl && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => window.open(project.liveUrl, '_blank', 'noopener,noreferrer')}
                       >
-                        <Github className="w-3 h-3" />
+                        Visit
                       </Button>
                     )}
                   </div>
@@ -374,16 +363,12 @@ const Portfolio = () => {
                       <DialogTitle className="text-2xl mb-2">{selectedProject.title}</DialogTitle>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          Completed: {new Date(selectedProject.completedDate).toLocaleDateString('en-NZ')}
+                          <Clock className="w-4 h-4" />
+                          {selectedProject.detailedInfo.timeline}
                         </div>
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
-                          {selectedProject.detailedInfo.teamSize}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {selectedProject.detailedInfo.timeline}
+                          {selectedProject.detailedInfo.clientType}
                         </div>
                       </div>
                     </div>
@@ -405,40 +390,31 @@ const Portfolio = () => {
                   <div>
                     <h3 className="text-lg font-semibold text-primary mb-3 flex items-center gap-2">
                       <Target className="w-5 h-5" />
-                      Project Overview
+                      Overview
                     </h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {selectedProject.detailedInfo.overview}
                     </p>
                   </div>
 
-                  {/* Challenge & Solution Grid */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-primary">The Challenge</h4>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
-                        {selectedProject.detailedInfo.challenge}
-                      </p>
-                    </div>
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-primary">Our Solution</h4>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
-                        {selectedProject.detailedInfo.solution}
-                      </p>
-                    </div>
+                  {/* Approach */}
+                  <div>
+                    <h4 className="font-semibold text-primary mb-2">Approach</h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {selectedProject.detailedInfo.approach}
+                    </p>
                   </div>
 
-                  {/* Results */}
+                  {/* Capabilities */}
                   <div>
-                    <h3 className="text-lg font-semibold text-primary mb-3 flex items-center gap-2">
-                      <CheckCircle className="w-5 h-5" />
-                      Key Results
+                    <h3 className="text-lg font-semibold text-primary mb-3">
+                      {selectedProject.isLive ? 'What It Does' : 'What This Demonstrates'}
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-3">
-                      {selectedProject.detailedInfo.results.map((result, index) => (
+                      {selectedProject.detailedInfo.capabilities.map((capability, index) => (
                         <div key={index} className="flex items-start gap-2 p-3 bg-secondary/10 rounded-lg">
-                          <CheckCircle className="w-4 h-4 text-secondary mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-muted-foreground">{result}</span>
+                          <Sparkles className="w-4 h-4 text-secondary mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-muted-foreground">{capability}</span>
                         </div>
                       ))}
                     </div>
@@ -469,53 +445,35 @@ const Portfolio = () => {
                     </div>
                   </div>
 
-                  {/* Project Info */}
-                  <div className="bg-muted/30 p-4 rounded-lg">
-                    <div className="grid sm:grid-cols-3 gap-4 text-sm">
-                      <div>
-                        <p className="font-medium text-primary">Client Type</p>
-                        <p className="text-muted-foreground">{selectedProject.detailedInfo.clientType}</p>
-                      </div>
-                      <div>
-                        <p className="font-medium text-primary">Timeline</p>
-                        <p className="text-muted-foreground">{selectedProject.detailedInfo.timeline}</p>
-                      </div>
-                      <div>
-                        <p className="font-medium text-primary">Team Size</p>
-                        <p className="text-muted-foreground">{selectedProject.detailedInfo.teamSize}</p>
-                      </div>
-                    </div>
-                  </div>
-
                   {/* CTA */}
                   <div className="bg-gradient-subtle p-6 rounded-lg text-center">
                     <h4 className="text-lg font-semibold text-primary mb-2">
-                      Need a Similar Solution?
+                      Want Something Like This?
                     </h4>
                     <p className="text-muted-foreground mb-4">
-                      Let's discuss how we can create something amazing for your business too.
+                      Let's talk about what you actually need -- no obligation.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                      <Button 
+                      <Button
                         className="btn-secondary"
                         onClick={() => {
                           setSelectedProject(null);
-                          document.getElementById('quote-wizard')?.scrollIntoView({ 
+                          document.getElementById('quote-wizard')?.scrollIntoView({
                             behavior: 'smooth',
-                            block: 'start' 
+                            block: 'start'
                           });
                         }}
                       >
                         Get a Quote
                         <ArrowRight className="ml-2 w-4 h-4" />
                       </Button>
-                      <Button 
+                      <Button
                         variant="outline"
                         onClick={() => {
                           setSelectedProject(null);
-                          document.getElementById('contact')?.scrollIntoView({ 
+                          document.getElementById('contact')?.scrollIntoView({
                             behavior: 'smooth',
-                            block: 'start' 
+                            block: 'start'
                           });
                         }}
                       >
@@ -530,7 +488,7 @@ const Portfolio = () => {
         </Dialog>
 
         {/* CTA Section */}
-        <motion.div 
+        <motion.div
           className="text-center mt-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -541,30 +499,30 @@ const Portfolio = () => {
             Ready to Start Your Project?
           </h3>
           <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Every great project starts with a conversation. Let's discuss your ideas 
+            Every great project starts with a conversation. Let's discuss your ideas
             and see how we can bring them to life.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="btn-secondary"
               onClick={() => {
-                document.getElementById('quote-wizard')?.scrollIntoView({ 
+                document.getElementById('quote-wizard')?.scrollIntoView({
                   behavior: 'smooth',
-                  block: 'start' 
+                  block: 'start'
                 });
               }}
             >
               Start Our Project Quiz
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="lg"
               onClick={() => {
-                document.getElementById('contact')?.scrollIntoView({ 
+                document.getElementById('contact')?.scrollIntoView({
                   behavior: 'smooth',
-                  block: 'start' 
+                  block: 'start'
                 });
               }}
             >

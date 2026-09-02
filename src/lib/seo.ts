@@ -7,7 +7,7 @@ export const generateOrganizationSchema = () => ({
   "name": "Zion Works",
   "url": "https://zionworks.dev",
   "logo": "https://zionworks.dev/logo.png",
-  "description": "Digital transformation specialists serving the entire Waikato region including Hamilton, Cambridge, Te Kuiti, Taumarunui, Otorohanga and King Country. We build websites, mobile apps, e-commerce platforms, and AI solutions for local businesses.",
+  "description": "Web development and AI automation for New Zealand businesses, based in King Country, Waikato. We build websites, mobile apps, e-commerce platforms, and AI solutions -- serving businesses locally and remotely across NZ.",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Te Kuiti",
@@ -83,6 +83,10 @@ export const generateOrganizationSchema = () => ({
       "name": "King Country",
       "addressRegion": "Waikato",
       "addressCountry": "NZ"
+    },
+    {
+      "@type": "Country",
+      "name": "New Zealand"
     }
   ]
 });
@@ -92,7 +96,7 @@ export const generateLocalBusinessSchema = () => ({
   "@type": "LocalBusiness",
   "name": "Zion Works",
   "image": "https://zionworks.dev/hero-image.jpg",
-  "description": "Professional web development and digital solutions for Waikato businesses. Specializing in websites, e-commerce, mobile apps, and AI integration. Serving Hamilton, Cambridge, Te Kuiti, Taumarunui, Otorohanga, and the entire King Country region.",
+  "description": "Professional web development and AI automation for New Zealand businesses. Specialising in websites, e-commerce, mobile apps, and AI integration. Based in King Country, Waikato, serving clients locally and remotely across NZ.",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Te Kuiti",
@@ -126,16 +130,17 @@ export const generateServiceSchema = (service: any) => ({
     "name": "Zion Works"
   },
   "areaServed": [
+    "New Zealand",
+    "Waikato",
+    "King Country",
     "Hamilton",
-    "Cambridge", 
+    "Cambridge",
     "Te Kuiti",
     "Taumarunui",
     "Otorohanga",
     "Matamata",
     "Tokoroa",
-    "Putaruru",
-    "King Country",
-    "Waikato"
+    "Putaruru"
   ],
   "serviceType": service.category,
   "offers": {
@@ -198,9 +203,9 @@ export const generateMetaTags = (page: {
   const baseUrl = 'https://zionworks.dev';
   
   return {
-    title: `${page.title} | Zion Works - King Country Web Development`,
+    title: `${page.title} | Zion Works - NZ Web & AI Development, based in King Country`,
     description: page.description,
-    keywords: page.keywords || 'web development Hamilton, Cambridge web developer, Te Kuiti website design, Waikato digital marketing, King Country web development, e-commerce New Zealand, AI solutions, mobile app development',
+    keywords: page.keywords || 'web development New Zealand, AI automation, King Country web development, Waikato digital marketing, e-commerce New Zealand, AI solutions, mobile app development',
     ogTitle: page.title,
     ogDescription: page.description,
     ogImage: page.ogImage || `${baseUrl}/hero-image.jpg`,

@@ -66,8 +66,8 @@ const Footer = () => {
               🥝 Proudly Built in King Country, New Zealand
             </div>
             <p className="text-primary-foreground/70 max-w-2xl mx-auto">
-              Supporting local businesses across Ōtorohanga, Te Kuiti, Waitomo, and the wider King Country region. 
-              We understand the unique challenges and opportunities of rural New Zealand business.
+              Based in King Country, serving businesses across New Zealand -- in person locally
+              around Ōtorohanga, Te Kuiti, and Waitomo, or remotely anywhere else in NZ.
             </p>
           </div>
         </div>

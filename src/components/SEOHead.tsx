@@ -14,14 +14,14 @@ interface SEOHeadProps {
 export const SEOHead: React.FC<SEOHeadProps> = ({
   title,
   description,
-  keywords = 'web development, Te Kuiti, King Country, website design, digital marketing, e-commerce',
+  keywords = 'web development New Zealand, King Country, website design, AI automation, digital marketing, e-commerce',
   ogImage = '/hero-image.jpg',
   canonicalUrl,
   schemaData = [],
   noIndex = false
 }) => {
   const baseUrl = 'https://zionworks.dev';
-  const fullTitle = `${title} | Zion Works - King Country Web Development`;
+  const fullTitle = `${title} | Zion Works - NZ Web & AI Development, based in King Country`;
   const fullOgImage = ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`;
   const fullCanonicalUrl = canonicalUrl || baseUrl;
 
@@ -80,25 +80,6 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
           }}
         />
       ))}
-
-      {/* Google Analytics (when configured) */}
-      <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'GA_MEASUREMENT_ID', {
-              page_title: '${title}',
-              page_location: '${fullCanonicalUrl}',
-              custom_map: {
-                'custom_parameter': 'page_type'
-              }
-            });
-          `
-        }}
-      />
     </>
   );
 };
