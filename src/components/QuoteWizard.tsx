@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, ArrowLeft, Upload, Check, Loader2 } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Upload, Check, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,6 +9,10 @@ import { useToast } from '@/hooks/use-toast';
 const QuoteWizard = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAiBrief, setShowAiBrief] = useState(false);
+  const [aiDescription, setAiDescription] = useState('');
+  const [isGeneratingBrief, setIsGeneratingBrief] = useState(false);
+  const [aiSummary, setAiSummary] = useState<string | null>(null);
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     projectType: '',
@@ -19,7 +23,8 @@ const QuoteWizard = () => {
     email: '',
     phone: '',
     description: '',
-    files: null as FileList | null
+    files: null as FileList | null,
+    source: 'wizard' as 'wizard' | 'ai_brief'
   });
 
   const projectTypes = [
@@ -53,6 +58,46 @@ const QuoteWizard = () => {
     if (currentStep < 5) setCurrentStep(currentStep + 1);
   };
 
+  const handleGenerateBrief = async () => {
+    if (!aiDescription.trim()) return;
+
+    setIsGeneratingBrief(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-brief', {
+        body: { description: aiDescription },
+      });
+
+      if (error) throw error;
+
+      setFormData({
+        ...formData,
+        projectType: data.project_type,
+        timeline: data.timeline,
+        budget: data.budget,
+        description: aiDescription,
+        source: 'ai_brief'
+      });
+      setAiSummary(data.summary);
+
+      toast({
+        title: "Brief drafted! ✨",
+        description: "Have a look below, then add your contact details to send it through."
+      });
+
+      setCurrentStep(5);
+    } catch (error) {
+      console.error('Generate brief error:', error);
+      toast({
+        title: "Couldn't draft that automatically",
+        description: "No worries -- just pick the options manually instead.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGeneratingBrief(false);
+    }
+  };
+
   const handleBack = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
@@ -80,6 +125,7 @@ const QuoteWizard = () => {
           timeline: formData.timeline,
           budget: formData.budget,
           description: formData.description,
+          source: formData.source,
         },
       });
 
@@ -102,8 +148,12 @@ const QuoteWizard = () => {
         email: '',
         phone: '',
         description: '',
-        files: null
+        files: null,
+        source: 'wizard'
       });
+      setShowAiBrief(false);
+      setAiDescription('');
+      setAiSummary(null);
       setCurrentStep(1);
 
     } catch (error) {
@@ -157,25 +207,64 @@ const QuoteWizard = () => {
           {/* Step 1: Project Type */}
           {currentStep === 1 && (
             <div className="opacity-100 translate-y-0 transition-all duration-300">
-              <h3 className="text-2xl font-bold text-primary mb-6 text-center">
+              <h3 className="text-2xl font-bold text-primary mb-2 text-center">
                 What do you want to build?
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {projectTypes.map((type) => (
-                  <button
-                    key={type.id}
-                    onClick={() => setFormData({...formData, projectType: type.id})}
-                    className={`p-6 rounded-xl border-2 transition-all duration-200 text-left ${
-                      formData.projectType === type.id
-                        ? 'border-secondary bg-secondary/10'
-                        : 'border-border hover:border-secondary/50'
-                    }`}
-                  >
-                    <h4 className="font-semibold text-primary mb-2">{type.title}</h4>
-                    <p className="text-muted-foreground">{type.description}</p>
-                  </button>
-                ))}
+              <div className="text-center mb-6">
+                <button
+                  type="button"
+                  onClick={() => setShowAiBrief(!showAiBrief)}
+                  className="text-sm text-secondary hover:underline inline-flex items-center gap-1"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  {showAiBrief ? 'Pick from the options instead' : "Not sure? Describe it in your own words"}
+                </button>
               </div>
+
+              {showAiBrief ? (
+                <div className="space-y-4">
+                  <Textarea
+                    value={aiDescription}
+                    onChange={(e) => setAiDescription(e.target.value)}
+                    placeholder="e.g. I run a fencing business and need a simple site where customers can request a quote and see photos of past jobs..."
+                    className="min-h-[140px]"
+                  />
+                  <Button
+                    onClick={handleGenerateBrief}
+                    disabled={!aiDescription.trim() || isGeneratingBrief}
+                    className="btn-secondary w-full"
+                  >
+                    {isGeneratingBrief ? (
+                      <>
+                        <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                        Drafting your brief...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="mr-2 w-4 h-4" />
+                        Generate my brief
+                      </>
+                    )}
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {projectTypes.map((type) => (
+                    <button
+                      key={type.id}
+                      onClick={() => setFormData({...formData, projectType: type.id})}
+                      className={`p-6 rounded-xl border-2 transition-all duration-200 text-left ${
+                        formData.projectType === type.id
+                          ? 'border-secondary bg-secondary/10'
+                          : 'border-border hover:border-secondary/50'
+                      }`}
+                    >
+                      <h4 className="font-semibold text-primary mb-2">{type.title}</h4>
+                      <p className="text-muted-foreground">{type.description}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -268,6 +357,20 @@ const QuoteWizard = () => {
                 Let's get in touch
               </h3>
               <div className="space-y-6">
+                {aiSummary && (
+                  <div className="bg-secondary/10 border border-secondary/30 rounded-xl p-4">
+                    <p className="text-sm font-medium text-primary mb-1 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      AI-drafted brief -- edit anything below before sending
+                    </p>
+                    <p className="text-sm text-muted-foreground">{aiSummary}</p>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Type: {projectTypes.find(t => t.id === formData.projectType)?.title} ·
+                      Timeline: {timelines.find(t => t.id === formData.timeline)?.title} ·
+                      Budget: {budgets.find(b => b.id === formData.budget)?.title}
+                    </p>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-primary mb-2">

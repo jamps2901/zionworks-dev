@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 // Lazy load admin components for better performance
 const Admin = lazy(() => import("./pages/Admin"));
 const ClientPortal = lazy(() => import("./pages/ClientPortal"));
+const WidgetEmbed = lazy(() => import("./pages/WidgetEmbed"));
 
 
 const queryClient = new QueryClient({
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/terms" element={<Terms />} />
           <Route path="/client-portal" element={<ClientPortal />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/w/:slug" element={<WidgetEmbed />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

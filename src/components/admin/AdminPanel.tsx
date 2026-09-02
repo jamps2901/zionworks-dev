@@ -10,7 +10,8 @@ import {
   X,
   Settings,
   Edit,
-  UserPlus
+  UserPlus,
+  Bot
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AdminAuthProvider, useAdminAuth } from './AdminAuth';
@@ -25,8 +26,9 @@ import BlogManager from './BlogManager';
 import LiveChatManager from './LiveChatManager';
 import IntakeManager from './IntakeManager';
 import ClientManager from './ClientManager';
+import WidgetClientsManager from './WidgetClientsManager';
 
-type AdminSection = 'dashboard' | 'intake' | 'client-management' | 'live-chat' | 'quotes' | 'contacts' | 'bookings' | 'blog' | 'services' | 'settings';
+type AdminSection = 'dashboard' | 'intake' | 'client-management' | 'live-chat' | 'quotes' | 'contacts' | 'bookings' | 'blog' | 'services' | 'widget-clients' | 'settings';
 
 const AdminPanel = () => {
   return (
@@ -64,6 +66,7 @@ const AdminPanelContent = () => {
     { id: 'bookings', label: 'Consultations', icon: Calendar },
     { id: 'blog', label: 'Blog Posts', icon: Edit },
     { id: 'services', label: 'Services', icon: Settings },
+    { id: 'widget-clients', label: 'Widget Clients', icon: Bot },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
@@ -99,6 +102,8 @@ const AdminPanelContent = () => {
         return <BlogManager />;
       case 'services':
         return <ServicesManager />;
+      case 'widget-clients':
+        return <WidgetClientsManager />;
       case 'settings':
         return <AdminSettings adminEmail={adminEmail} />;
       default:
@@ -191,7 +196,8 @@ const AdminPanelContent = () => {
                  currentSection === 'bookings' ? 'Consultations' :
                  currentSection === 'blog' ? 'Blog Posts' :
                  currentSection === 'services' ? 'Services' :
-                 currentSection === 'settings' ? 'Settings' : 
+                 currentSection === 'widget-clients' ? 'Widget Clients' :
+                 currentSection === 'settings' ? 'Settings' :
                  'Dashboard'}
               </h1>
             </div>

@@ -18,6 +18,7 @@ interface QuoteSubmission {
   timeline: string;
   budget: string;
   description: string;
+  source?: string;
 }
 
 serve(async (req) => {
@@ -47,6 +48,7 @@ serve(async (req) => {
           timeline: quoteData.timeline,
           budget: quoteData.budget,
           message: `Platform: ${quoteData.platform}\n\nPhone: ${quoteData.phone || 'Not provided'}\n\nDescription: ${quoteData.description}`,
+          source: quoteData.source || 'wizard',
         },
       ])
       .select()

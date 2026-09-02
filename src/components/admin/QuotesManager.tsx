@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { FileText, User, Mail, Clock, DollarSign, AlertCircle } from 'lucide-react';
+import { FileText, User, Mail, Clock, DollarSign, AlertCircle, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -16,6 +16,7 @@ interface Quote {
   timeline: string;
   budget: string;
   message: string;
+  source: string;
 }
 
 const QuotesManager = () => {
@@ -177,6 +178,12 @@ const QuotesManager = () => {
                           <div className="flex items-center gap-2">
                             <User className="w-4 h-4 text-muted-foreground" />
                             <span className="font-medium">{quote.name}</span>
+                            {quote.source === 'ai_brief' && (
+                              <Badge variant="outline" className="text-xs gap-1">
+                                <Sparkles className="w-3 h-3" />
+                                AI Brief
+                              </Badge>
+                            )}
                           </div>
                           <div className="flex items-center gap-2">
                             <Mail className="w-4 h-4 text-muted-foreground" />
