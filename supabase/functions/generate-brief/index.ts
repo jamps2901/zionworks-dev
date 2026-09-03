@@ -35,10 +35,19 @@ serve(async (req) => {
     );
 
     // Basic per-IP rate limit -- this is unauthenticated and public-facing.
-    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    // Try several header names since which one is actually populated varies by
+    // edge runtime/proxy -- falling back to a single 'unknown' bucket for every
+    // caller (as a single fixed header name would do if it's absent here) turns
+    // this into one shared global limit instead of a per-caller one.
+    const clientIp =
+      req.headers.get('cf-connecting-ip')?.trim() ||
+      req.headers.get('x-real-ip')?.trim() ||
+      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      req.headers.get('true-client-ip')?.trim() ||
+      'unknown';
     const { data: rateLimitOk } = await supabaseClient.rpc('check_widget_rate_limit', {
       p_slug: `generate-brief:${clientIp}`,
-      p_max_per_minute: 5,
+      p_max_per_minute: 10,
     });
     if (!rateLimitOk) {
       return new Response(JSON.stringify({ error: "Too many requests, please try again shortly" }), {
