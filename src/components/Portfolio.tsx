@@ -3,22 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ExternalLink, ArrowRight, Users, Clock, Target, Sparkles } from 'lucide-react';
+import { ExternalLink, ArrowRight, Users, Clock, Target, Sparkles, Bot, Hammer, Sprout, Home, UtensilsCrossed, MessageSquare, type LucideIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// Import project screenshots
-import ecommerceImg from '@/assets/portfolio-ecommerce.webp';
-import farmAppImg from '@/assets/portfolio-farm-app.webp';
-import electricianImg from '@/assets/portfolio-electrician.webp';
-import restaurantImg from '@/assets/portfolio-restaurant.webp';
-import aiChatbotImg from '@/assets/portfolio-ai-chatbot.webp';
-import realEstateImg from '@/assets/portfolio-realestate.webp';
-
+// Card headers use an icon + gradient rather than screenshots -- the previous
+// image assets were AI-generated mockups with garbled, unreadable text baked
+// into the pixels (spotted live on the deployed site), which is worse for
+// trust than no image at all, especially on cards already labeled "concept
+// build, not a past client."
 interface Project {
   id: number;
   title: string;
   description: string;
-  image: string;
+  icon: LucideIcon;
+  gradientClass: string;
   category: string;
   technologies: string[];
   liveUrl?: string;
@@ -45,7 +43,8 @@ const Portfolio = () => {
       id: 1,
       title: "BarterMuse",
       description: "A real, live AI-powered local trade platform -- built end to end on this same stack. Not a demo: it's shipped, running, and actually used.",
-      image: aiChatbotImg,
+      icon: Bot,
+      gradientClass: "from-secondary to-accent",
       category: "Live Product",
       technologies: ["React", "TypeScript", "Supabase", "AI"],
       liveUrl: "https://shop.bartermuse.app",
@@ -73,7 +72,8 @@ const Portfolio = () => {
       id: 2,
       title: "Tradie & Local Service Sites",
       description: "The kind of site a sparky, plumber, or builder actually needs: booking, a service calculator, and a way to look credible against Hamilton-based competitors.",
-      image: electricianImg,
+      icon: Hammer,
+      gradientClass: "from-primary to-secondary",
       category: "Concept Build",
       technologies: ["React", "TypeScript", "Supabase"],
       isLive: false,
@@ -100,7 +100,8 @@ const Portfolio = () => {
       id: 3,
       title: "Farm & Rural Supply E-commerce",
       description: "An online ordering concept for a rural supply business -- built to show how a local retailer competes with big-city online competitors without losing the personal relationship.",
-      image: farmAppImg,
+      icon: Sprout,
+      gradientClass: "from-accent to-primary",
       category: "Concept Build",
       technologies: ["React", "Supabase", "Stripe"],
       isLive: false,
@@ -127,7 +128,8 @@ const Portfolio = () => {
       id: 4,
       title: "Property & Real Estate Platform",
       description: "A concept for a real estate presence built to compete on experience, not just listings -- virtual tours, an interactive map, and a client-facing sales tracker.",
-      image: realEstateImg,
+      icon: Home,
+      gradientClass: "from-secondary to-primary",
       category: "Concept Build",
       technologies: ["React", "Node.js", "Mapbox"],
       isLive: false,
@@ -154,7 +156,8 @@ const Portfolio = () => {
       id: 5,
       title: "Multi-Location Hospitality System",
       description: "A concept for a small hospitality group juggling multiple locations -- unified ordering, kitchen display, and loyalty, without the cut third-party delivery apps take.",
-      image: restaurantImg,
+      icon: UtensilsCrossed,
+      gradientClass: "from-primary to-accent",
       category: "Concept Build",
       technologies: ["React", "Supabase", "Stripe"],
       isLive: false,
@@ -181,7 +184,8 @@ const Portfolio = () => {
       id: 6,
       title: "AI Customer Assistant Concept",
       description: "A concept AI assistant for a tourism or service operator needing after-hours coverage -- the same category of tool now offered as a monthly bolt-on for any existing site.",
-      image: ecommerceImg,
+      icon: MessageSquare,
+      gradientClass: "from-accent to-secondary",
       category: "Concept Build",
       technologies: ["OpenAI", "Supabase", "React"],
       isLive: false,
@@ -273,14 +277,9 @@ const Portfolio = () => {
               viewport={{ once: true }}
             >
               <Card className={`card-feature group h-full ${project.isLive ? 'ring-2 ring-secondary/60' : ''}`}>
-                {/* Project Image */}
-                <div className="relative overflow-hidden rounded-t-xl bg-gradient-subtle aspect-video">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                {/* Project Header */}
+                <div className={`relative overflow-hidden rounded-t-xl aspect-video flex items-center justify-center bg-gradient-to-br ${project.gradientClass} transition-transform duration-300 group-hover:scale-105`}>
+                  <project.icon className="w-16 h-16 text-primary-foreground/90" strokeWidth={1.5} />
                   <div className="absolute top-3 right-3">
                     <Badge variant="secondary" className={project.isLive ? 'gap-1' : ''}>
                       {project.isLive && <Sparkles className="w-3 h-3" />}
@@ -377,13 +376,9 @@ const Portfolio = () => {
                 </DialogHeader>
 
                 <div className="space-y-6">
-                  {/* Project Image */}
-                  <div className="aspect-video overflow-hidden rounded-lg">
-                    <img
-                      src={selectedProject.image}
-                      alt={selectedProject.title}
-                      className="w-full h-full object-cover"
-                    />
+                  {/* Project Header */}
+                  <div className={`aspect-video overflow-hidden rounded-lg flex items-center justify-center bg-gradient-to-br ${selectedProject.gradientClass}`}>
+                    <selectedProject.icon className="w-24 h-24 text-primary-foreground/90" strokeWidth={1.5} />
                   </div>
 
                   {/* Overview */}

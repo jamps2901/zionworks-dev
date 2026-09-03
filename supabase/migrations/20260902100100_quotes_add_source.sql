@@ -4,6 +4,8 @@ ALTER TABLE public.quotes
   ADD COLUMN source text NOT NULL DEFAULT 'wizard',
   ADD COLUMN ai_raw_description text;
 
+DROP FUNCTION IF EXISTS public.get_admin_quotes();
+
 CREATE OR REPLACE FUNCTION public.get_admin_quotes()
 RETURNS TABLE (
   id bigint,
