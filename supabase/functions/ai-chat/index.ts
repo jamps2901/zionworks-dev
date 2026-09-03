@@ -17,7 +17,7 @@ function getCorsHeaders(origin: string | null) {
   };
 }
 
-const GEMINI_MODEL = 'gemini-2.0-flash';
+const GEMINI_MODEL = 'gemini-3.6-flash';
 
 const ZION_WORKS_SYSTEM_PROMPT = `You are Matey, Zion Works' friendly AI assistant specializing in web development and digital solutions for New Zealand businesses, particularly in the King Country and Waikato regions.
 

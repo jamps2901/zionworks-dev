@@ -71,7 +71,7 @@ serve(async (req) => {
     // tool_config forces Gemini to always call draft_brief (mode: 'ANY'),
     // equivalent to OpenAI's function_call: { name: 'draft_brief' }.
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

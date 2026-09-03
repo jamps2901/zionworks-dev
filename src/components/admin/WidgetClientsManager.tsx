@@ -35,7 +35,7 @@ const emptyForm = {
   bot_display_name: 'Assistant',
   primary_color: '#2563eb',
   welcome_message: 'Hi! How can I help?',
-  openai_model: 'gemini-2.0-flash',
+  openai_model: 'gemini-3.6-flash',
   is_active: true,
 };
 
