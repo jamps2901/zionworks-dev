@@ -34,22 +34,20 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Basic per-IP rate limit -- this is unauthenticated and public-facing.
-    // Try several header names since which one is actually populated varies by
-    // edge runtime/proxy -- falling back to a single 'unknown' bucket for every
-    // caller (as a single fixed header name would do if it's absent here) turns
-    // this into one shared global limit instead of a per-caller one.
-    const clientIp =
-      req.headers.get('cf-connecting-ip')?.trim() ||
-      req.headers.get('x-real-ip')?.trim() ||
-      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      req.headers.get('true-client-ip')?.trim() ||
-      'unknown';
-    const { data: rateLimitOk } = await supabaseClient.rpc('check_widget_rate_limit', {
-      p_slug: `generate-brief:${clientIp}`,
-      p_max_per_minute: 10,
+    // Sitewide (not per-visitor) rate limit -- no caller-identifying header
+    // proved reliable in this runtime, so a per-IP scheme just collapsed into
+    // one shared bucket that legitimate testing could exhaust. A single
+    // generous global cap is honest about what this actually protects
+    // against (a runaway loop/scraper), without ever blocking normal use.
+    // Fails open on any RPC error -- a broken limiter should never take the
+    // feature down.
+    const { data: rateLimitOk, error: rateLimitError } = await supabaseClient.rpc('check_widget_rate_limit', {
+      p_slug: 'generate-brief',
+      p_max_per_minute: 30,
     });
-    if (!rateLimitOk) {
+    if (rateLimitError) {
+      console.error('Rate limit check failed, allowing request:', rateLimitError);
+    } else if (!rateLimitOk) {
       return new Response(JSON.stringify({ error: "Too many requests, please try again shortly" }), {
         status: 429,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
