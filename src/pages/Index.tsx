@@ -12,10 +12,12 @@ import Footer from '@/components/Footer';
 import ChatBot from '@/components/ChatBot';
 import VoiceInterface from '@/components/VoiceInterface';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import type { HeroBrief } from '@/components/QuoteWizard';
 
 const Index = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  
+  const [heroBrief, setHeroBrief] = useState<HeroBrief | null>(null);
+
   // Track page analytics
   const { trackInteraction } = useAnalytics({
     pageTitle: 'Home',
@@ -31,12 +33,12 @@ const Index = () => {
   return (
     <main className="min-h-screen">
       <Navigation />
-      <Hero />
+      <Hero onBriefReady={setHeroBrief} />
       <About />
       <Services />
       <Portfolio />
       <Blog />
-      <QuoteWizard />
+      <QuoteWizard prefilledBrief={heroBrief} />
       <BookingSystem />
       <Contact />
       <Footer />

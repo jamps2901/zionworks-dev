@@ -136,9 +136,8 @@ const About = () => {
               <h3 className="text-2xl font-bold text-foreground">Our Mission</h3>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              To democratise cutting-edge technology for New Zealand businesses. We believe that a 
-              family-owned farm in Te Kuiti should have access to the same AI-powered automation as 
-              a multinational corporation in Auckland—just with better customer service and a fair price.
+              A family farm in Te Kuiti deserves the same AI-powered tools as a multinational —
+              at a fair price, from someone who picks up the phone.
             </p>
           </motion.div>
 
@@ -154,9 +153,7 @@ const About = () => {
               <h3 className="text-2xl font-bold text-foreground">Our Vision</h3>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              A future where geography doesn't limit opportunity. Where a brilliant idea in rural 
-              New Zealand can reach global markets with the help of AI, where local businesses 
-              can compete on the world stage, and where technology serves humanity, not the other way around.
+              Geography shouldn't cap what a rural business can build. AI closes that gap.
             </p>
           </motion.div>
         </div>
@@ -177,24 +174,21 @@ const About = () => {
             <div className="glass-card p-6 rounded-xl hover:scale-105 transition-all duration-300">
               <h4 className="text-xl font-semibold text-foreground mb-3">No Tech Jargon</h4>
               <p className="text-muted-foreground">
-                We speak plain English. No confusing technical terms—just honest conversations 
-                about how technology can help your business grow.
+                Plain English, straight answers.
               </p>
             </div>
-            
+
             <div className="glass-card p-6 rounded-xl hover:scale-105 transition-all duration-300">
               <h4 className="text-xl font-semibold text-foreground mb-3">Local Understanding</h4>
               <p className="text-muted-foreground">
-                We understand the unique challenges of Kiwi businesses—from seasonal cash flow 
-                to rural connectivity. Our solutions are built for our reality.
+                Seasonal cash flow, rural connectivity — built for the reality, not a template.
               </p>
             </div>
-            
+
             <div className="glass-card p-6 rounded-xl hover:scale-105 transition-all duration-300">
               <h4 className="text-xl font-semibold text-foreground mb-3">Future-Ready</h4>
               <p className="text-muted-foreground">
-                While we're grounded in local values, we're always looking ahead. AI, automation, 
-                and emerging tech—we help you stay competitive tomorrow, not just today.
+                AI and automation baked in, not bolted on later.
               </p>
             </div>
           </div>
@@ -207,9 +201,8 @@ const About = () => {
             className="mt-12"
           >
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              <strong className="text-foreground">From King Country to the Cloud:</strong> We're not just building websites 
-              and apps—we're building the digital infrastructure that will help New Zealand businesses 
-              thrive for generations to come.
+              <strong className="text-foreground">From King Country to the Cloud:</strong>{' '}
+              real infrastructure for real Kiwi businesses, built to last.
             </p>
           </motion.div>
         </motion.div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Upload, Check, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,7 +6,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-const QuoteWizard = () => {
+export interface HeroBrief {
+  description: string;
+  project_type: string;
+  timeline: string;
+  budget: string;
+  summary: string;
+}
+
+interface QuoteWizardProps {
+  prefilledBrief?: HeroBrief | null;
+}
+
+const QuoteWizard = ({ prefilledBrief }: QuoteWizardProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAiBrief, setShowAiBrief] = useState(false);
@@ -97,6 +109,28 @@ const QuoteWizard = () => {
       setIsGeneratingBrief(false);
     }
   };
+
+  // Consumes a brief generated from the Hero's prompt input (same generate-brief
+  // call, different entry point) -- pre-fills exactly like the in-wizard AI
+  // toggle does, then jumps straight to contact details and scrolls into view.
+  useEffect(() => {
+    if (!prefilledBrief) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      projectType: prefilledBrief.project_type,
+      timeline: prefilledBrief.timeline,
+      budget: prefilledBrief.budget,
+      description: prefilledBrief.description,
+      source: 'ai_brief'
+    }));
+    setAiSummary(prefilledBrief.summary);
+    setCurrentStep(5);
+
+    requestAnimationFrame(() => {
+      document.getElementById('quote-wizard')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, [prefilledBrief]);
 
   const handleBack = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);

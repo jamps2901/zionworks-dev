@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ExternalLink, ArrowRight, Users, Clock, Target, Sparkles, Bot, Hammer, Sprout, Home, UtensilsCrossed, MessageSquare, type LucideIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTiltHover } from '@/hooks/useMagneticHover';
 
 // Card headers use an icon + gradient rather than screenshots -- the previous
 // image assets were AI-generated mockups with garbled, unreadable text baked
@@ -30,6 +31,116 @@ interface Project {
     clientType: string;
   };
 }
+
+// Extracted so each card gets its own tilt-hover hook instance -- hooks
+// can't run inside the .map() below.
+const ProjectCard = ({ project, onSelect }: { project: Project; onSelect: (p: Project) => void }) => {
+  const tilt = useTiltHover(6);
+
+  return (
+    <motion.div
+      ref={tilt.ref as React.RefObject<HTMLDivElement>}
+      style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformPerspective: 1000 }}
+      {...tilt.handlers}
+    >
+      <Card className={`card-feature group h-full ${project.isLive ? 'ring-2 ring-secondary/60' : ''}`}>
+        {/* Project Header */}
+        <div className={`relative overflow-hidden rounded-t-xl aspect-video flex items-center justify-center bg-gradient-to-br ${project.gradientClass}`}>
+          {/* Floating gradient blobs -- a live card, not a flat rectangle */}
+          <motion.div
+            className="absolute w-24 h-24 rounded-full bg-primary-foreground/20 blur-2xl"
+            style={{ top: '10%', left: '15%' }}
+            animate={{ x: [0, 15, 0], y: [0, -10, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute w-20 h-20 rounded-full bg-primary-foreground/10 blur-2xl"
+            style={{ bottom: '10%', right: '15%' }}
+            animate={{ x: [0, -12, 0], y: [0, 10, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+          />
+          {/* Dot-grid texture */}
+          <div
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: 'radial-gradient(circle, hsl(var(--primary-foreground)) 1px, transparent 1px)',
+              backgroundSize: '18px 18px',
+            }}
+          />
+          <project.icon
+            className="w-16 h-16 text-primary-foreground/90 relative z-10 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_16px_hsl(var(--primary-foreground)/0.6)]"
+            strokeWidth={1.5}
+          />
+          <div className="absolute top-3 right-3 z-10">
+            <Badge variant="secondary" className={project.isLive ? 'gap-1' : ''}>
+              {project.isLive && <Sparkles className="w-3 h-3" />}
+              {project.category}
+            </Badge>
+          </div>
+        </div>
+
+        <CardContent className="p-6">
+          <CardHeader className="p-0 mb-4">
+            <CardTitle className="text-xl mb-2">{project.title}</CardTitle>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              {project.description}
+            </p>
+          </CardHeader>
+
+          {/* Technologies */}
+          <div className="mb-4">
+            <p className="text-sm font-medium text-primary mb-2">Technologies:</p>
+            <div className="flex flex-wrap gap-2">
+              {project.technologies.map((tech) => (
+                <Badge key={tech} variant="outline" className="text-xs">
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {/* Status line */}
+          <div className="mb-4">
+            <p className="text-xs text-muted-foreground flex items-center">
+              {project.isLive ? (
+                <>
+                  <Sparkles className="w-3 h-3 mr-1 text-secondary" />
+                  Live product -- try it yourself
+                </>
+              ) : (
+                <>
+                  <Target className="w-3 h-3 mr-1" />
+                  Concept build, not a past client
+                </>
+              )}
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              className="btn-secondary flex-1"
+              onClick={() => onSelect(project)}
+            >
+              <ExternalLink className="w-3 h-3 mr-1" />
+              View Details
+            </Button>
+            {project.liveUrl && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => window.open(project.liveUrl, '_blank', 'noopener,noreferrer')}
+              >
+                Visit
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
 
 const Portfolio = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -276,77 +387,7 @@ const Portfolio = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className={`card-feature group h-full ${project.isLive ? 'ring-2 ring-secondary/60' : ''}`}>
-                {/* Project Header */}
-                <div className={`relative overflow-hidden rounded-t-xl aspect-video flex items-center justify-center bg-gradient-to-br ${project.gradientClass} transition-transform duration-300 group-hover:scale-105`}>
-                  <project.icon className="w-16 h-16 text-primary-foreground/90" strokeWidth={1.5} />
-                  <div className="absolute top-3 right-3">
-                    <Badge variant="secondary" className={project.isLive ? 'gap-1' : ''}>
-                      {project.isLive && <Sparkles className="w-3 h-3" />}
-                      {project.category}
-                    </Badge>
-                  </div>
-                </div>
-
-                <CardContent className="p-6">
-                  <CardHeader className="p-0 mb-4">
-                    <CardTitle className="text-xl mb-2">{project.title}</CardTitle>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {project.description}
-                    </p>
-                  </CardHeader>
-
-                  {/* Technologies */}
-                  <div className="mb-4">
-                    <p className="text-sm font-medium text-primary mb-2">Technologies:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.technologies.map((tech) => (
-                        <Badge key={tech} variant="outline" className="text-xs">
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Status line */}
-                  <div className="mb-4">
-                    <p className="text-xs text-muted-foreground flex items-center">
-                      {project.isLive ? (
-                        <>
-                          <Sparkles className="w-3 h-3 mr-1 text-secondary" />
-                          Live product -- try it yourself
-                        </>
-                      ) : (
-                        <>
-                          <Target className="w-3 h-3 mr-1" />
-                          Concept build, not a past client
-                        </>
-                      )}
-                    </p>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      className="btn-secondary flex-1"
-                      onClick={() => setSelectedProject(project)}
-                    >
-                      <ExternalLink className="w-3 h-3 mr-1" />
-                      View Details
-                    </Button>
-                    {project.liveUrl && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => window.open(project.liveUrl, '_blank', 'noopener,noreferrer')}
-                      >
-                        Visit
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+              <ProjectCard project={project} onSelect={setSelectedProject} />
             </motion.div>
           ))}
         </div>
