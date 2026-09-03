@@ -1,4 +1,3 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
@@ -17,6 +16,8 @@ function getCorsHeaders(origin: string | null) {
     'Vary': 'Origin',
   };
 }
+
+const GEMINI_MODEL = 'gemini-2.0-flash';
 
 const ZION_WORKS_SYSTEM_PROMPT = `You are Matey, Zion Works' friendly AI assistant specializing in web development and digital solutions for New Zealand businesses, particularly in the King Country and Waikato regions.
 
@@ -51,6 +52,44 @@ Your personality:
 
 Keep responses helpful but concise. Always offer to help with quotes or consultations.`;
 
+// Gemini's function-declaration schema uses uppercase type names (OBJECT,
+// STRING, ARRAY...), not JSON Schema's lowercase -- this is the one real
+// format difference from the old OpenAI "functions" array below.
+const ZION_WORKS_TOOLS = [
+  {
+    functionDeclarations: [
+      {
+        name: 'get_project_quote',
+        description: 'Generate a project quote based on requirements',
+        parameters: {
+          type: 'OBJECT',
+          properties: {
+            project_type: { type: 'STRING', description: 'Type of project (website, ecommerce, mobile app, etc.)' },
+            features: { type: 'ARRAY', items: { type: 'STRING' }, description: 'List of required features' },
+            timeline: { type: 'STRING', description: 'Desired timeline' },
+            budget_range: { type: 'STRING', description: 'Budget range' },
+          },
+          required: ['project_type'],
+        },
+      },
+      {
+        name: 'book_consultation',
+        description: 'Help user book a consultation with the Zion Works team',
+        parameters: {
+          type: 'OBJECT',
+          properties: {
+            name: { type: 'STRING', description: 'User name' },
+            email: { type: 'STRING', description: 'User email' },
+            phone: { type: 'STRING', description: 'User phone number' },
+            service_interest: { type: 'STRING', description: 'Service they are interested in' },
+          },
+          required: ['name', 'email'],
+        },
+      },
+    ],
+  },
+];
+
 serve(async (req) => {
   const requestOrigin = req.headers.get('origin');
   const corsHeaders = getCorsHeaders(requestOrigin);
@@ -67,13 +106,13 @@ serve(async (req) => {
       throw new Error('Message is required');
     }
 
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
-    if (!OPENAI_API_KEY) {
-      throw new Error('OpenAI API key not configured');
+    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
+    if (!GEMINI_API_KEY) {
+      throw new Error('Gemini API key not configured');
     }
 
     let systemPrompt = ZION_WORKS_SYSTEM_PROMPT;
-    let openaiModel = 'gpt-5-2025-08-07';
+    let geminiModel = GEMINI_MODEL;
     let allowFunctionCalls = true;
     let tenantCorsHeaders = corsHeaders;
 
@@ -124,75 +163,46 @@ serve(async (req) => {
       }
 
       systemPrompt = widgetClient.system_prompt;
-      openaiModel = widgetClient.openai_model;
+      // widget_clients.openai_model predates the Gemini switch -- still just a
+      // free-text model-name column, only used as a fallback if it happens to
+      // look like a Gemini model name; otherwise use the site default.
+      geminiModel = widgetClient.openai_model?.startsWith('gemini-') ? widgetClient.openai_model : GEMINI_MODEL;
       allowFunctionCalls = false; // tenant path: plain chat replies only for v1
     }
 
     const requestBody: Record<string, unknown> = {
-      model: openaiModel,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: message }
-      ],
-      max_completion_tokens: 500,
+      contents: [{ role: 'user', parts: [{ text: message }] }],
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      generationConfig: { maxOutputTokens: 500 },
     };
 
     if (allowFunctionCalls) {
-      requestBody.functions = [
-        {
-          name: 'get_project_quote',
-          description: 'Generate a project quote based on requirements',
-          parameters: {
-            type: 'object',
-            properties: {
-              project_type: { type: 'string', description: 'Type of project (website, ecommerce, mobile app, etc.)' },
-              features: { type: 'array', items: { type: 'string' }, description: 'List of required features' },
-              timeline: { type: 'string', description: 'Desired timeline' },
-              budget_range: { type: 'string', description: 'Budget range' }
-            },
-            required: ['project_type']
-          }
-        },
-        {
-          name: 'book_consultation',
-          description: 'Help user book a consultation with the Zion Works team',
-          parameters: {
-            type: 'object',
-            properties: {
-              name: { type: 'string', description: 'User name' },
-              email: { type: 'string', description: 'User email' },
-              phone: { type: 'string', description: 'User phone number' },
-              service_interest: { type: 'string', description: 'Service they are interested in' }
-            },
-            required: ['name', 'email']
-          }
-        }
-      ];
-      requestBody.function_call = 'auto';
+      requestBody.tools = ZION_WORKS_TOOLS;
     }
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    });
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('OpenAI API error:', errorData);
+      console.error('Gemini API error:', errorData);
       throw new Error(errorData.error?.message || 'Failed to get AI response');
     }
 
     const data = await response.json();
-    const aiMessage = data.choices[0].message;
+    const candidate = data.candidates?.[0];
+    const part = candidate?.content?.parts?.[0];
 
     // Handle function calls (Zion Works' own on-site chat only -- tenant path never sets these)
-    if (aiMessage.function_call) {
-      const functionName = aiMessage.function_call.name;
-      const functionArgs = JSON.parse(aiMessage.function_call.arguments);
+    if (part?.functionCall) {
+      const functionName = part.functionCall.name;
+      const functionArgs = part.functionCall.args || {};
 
       console.log('Function called:', functionName, functionArgs);
 
@@ -206,14 +216,14 @@ serve(async (req) => {
 
       return new Response(JSON.stringify({
         message: functionResponse,
-        function_call: aiMessage.function_call
+        function_call: { name: functionName, arguments: JSON.stringify(functionArgs) }
       }), {
         headers: { ...tenantCorsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     return new Response(JSON.stringify({
-      message: aiMessage.content
+      message: part?.text || "Sorry, I couldn't come up with a reply to that -- mind rephrasing?"
     }), {
       headers: { ...tenantCorsHeaders, 'Content-Type': 'application/json' },
     });

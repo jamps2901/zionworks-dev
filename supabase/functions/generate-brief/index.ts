@@ -60,79 +60,85 @@ serve(async (req) => {
       throw new Error("Description is required");
     }
 
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
-    if (!OPENAI_API_KEY) {
-      throw new Error('OpenAI API key not configured');
+    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
+    if (!GEMINI_API_KEY) {
+      throw new Error('Gemini API key not configured');
     }
 
     // One-shot structured extraction: map free text onto the same enums the
     // classic QuoteWizard steps already use, so submit-quote needs no changes
     // to its own logic -- only a new source field passed through.
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
-        messages: [
-          {
-            role: 'system',
-            content: `You turn a visitor's plain-English project description into a structured brief for a web/app development agency. Always call draft_brief with your best-guess classification -- never ask clarifying questions, just make a reasonable estimate. If the description is vague, lean toward the more common/likely option rather than the most expensive one.`,
+    // tool_config forces Gemini to always call draft_brief (mode: 'ANY'),
+    // equivalent to OpenAI's function_call: { name: 'draft_brief' }.
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: description }] }],
+          systemInstruction: {
+            parts: [{
+              text: `You turn a visitor's plain-English project description into a structured brief for a web/app development agency. Always call draft_brief with your best-guess classification -- never ask clarifying questions, just make a reasonable estimate. If the description is vague, lean toward the more common/likely option rather than the most expensive one.`,
+            }],
           },
-          { role: 'user', content: description },
-        ],
-        max_completion_tokens: 400,
-        functions: [
-          {
-            name: 'draft_brief',
-            description: 'Structure the visitor\'s project description into a quote brief',
-            parameters: {
-              type: 'object',
-              properties: {
-                project_type: {
-                  type: 'string',
-                  enum: ['website', 'app', 'ai', 'custom'],
-                  description: 'website = business site/e-commerce/landing page, app = mobile app, ai = chatbot/automation/AI integration, custom = CRM/booking/bespoke software',
+          generationConfig: { maxOutputTokens: 400 },
+          tools: [
+            {
+              functionDeclarations: [
+                {
+                  name: 'draft_brief',
+                  description: "Structure the visitor's project description into a quote brief",
+                  parameters: {
+                    type: 'OBJECT',
+                    properties: {
+                      project_type: {
+                        type: 'STRING',
+                        enum: ['website', 'app', 'ai', 'custom'],
+                        description: 'website = business site/e-commerce/landing page, app = mobile app, ai = chatbot/automation/AI integration, custom = CRM/booking/bespoke software',
+                      },
+                      timeline: {
+                        type: 'STRING',
+                        enum: ['urgent', 'standard', 'flexible'],
+                        description: 'urgent = 2-4 weeks, standard = 1-2 months, flexible = 3+ months. Default to standard if not mentioned.',
+                      },
+                      budget: {
+                        type: 'STRING',
+                        enum: ['small', 'medium', 'large', 'enterprise'],
+                        description: 'small = $2k-5k, medium = $5k-15k, large = $15k-50k, enterprise = $50k+. Default to medium if not mentioned.',
+                      },
+                      summary: {
+                        type: 'STRING',
+                        description: 'A 1-2 sentence plain-English summary of what they want built, for the founder to skim.',
+                      },
+                    },
+                    required: ['project_type', 'timeline', 'budget', 'summary'],
+                  },
                 },
-                timeline: {
-                  type: 'string',
-                  enum: ['urgent', 'standard', 'flexible'],
-                  description: 'urgent = 2-4 weeks, standard = 1-2 months, flexible = 3+ months. Default to standard if not mentioned.',
-                },
-                budget: {
-                  type: 'string',
-                  enum: ['small', 'medium', 'large', 'enterprise'],
-                  description: 'small = $2k-5k, medium = $5k-15k, large = $15k-50k, enterprise = $50k+. Default to medium if not mentioned.',
-                },
-                summary: {
-                  type: 'string',
-                  description: 'A 1-2 sentence plain-English summary of what they want built, for the founder to skim.',
-                },
-              },
-              required: ['project_type', 'timeline', 'budget', 'summary'],
+              ],
             },
+          ],
+          tool_config: {
+            function_calling_config: { mode: 'ANY', allowed_function_names: ['draft_brief'] },
           },
-        ],
-        function_call: { name: 'draft_brief' },
-      }),
-    });
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('OpenAI API error:', errorData);
+      console.error('Gemini API error:', errorData);
       throw new Error(errorData.error?.message || 'Failed to generate brief');
     }
 
     const data = await response.json();
-    const functionCall = data.choices[0].message.function_call;
+    const functionCall = data.candidates?.[0]?.content?.parts?.[0]?.functionCall;
 
     if (!functionCall) {
       throw new Error('AI did not return a structured brief');
     }
 
-    const brief = JSON.parse(functionCall.arguments);
+    const brief = functionCall.args;
 
     return new Response(
       JSON.stringify({
