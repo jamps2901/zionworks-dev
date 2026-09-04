@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Play, Zap, Users, Award, MessageCircle, Sparkles, Loader2, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowRight, Sparkles, Loader2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { motion, useAnimation, useInView, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import heroImage from '../assets/hero-bg.jpg';
 import ChatBot from './ChatBot';
 import { supabase } from '@/integrations/supabase/client';
@@ -32,11 +32,7 @@ const Hero = ({ onBriefReady }: HeroProps) => {
   const [isGeneratingHeroBrief, setIsGeneratingHeroBrief] = useState(false);
   const [heroBriefResult, setHeroBriefResult] = useState<HeroBrief | null>(null);
 
-  const ref = useRef(null);
-  const isInView = useInView(ref);
-  const controls = useAnimation();
   const quoteBtn = useMagneticHover(0.25);
-  const workBtn = useMagneticHover(0.25);
 
   const fullText = 'to the Cloud';
 
@@ -107,7 +103,7 @@ const Hero = ({ onBriefReady }: HeroProps) => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative flex items-center justify-center overflow-hidden py-28 md:py-36">
       {/* Animated Background */}
       <div className="absolute inset-0 z-0">
         <div className="animated-bg absolute inset-0" />
@@ -157,18 +153,6 @@ const Hero = ({ onBriefReady }: HeroProps) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          {/* Badge */}
-          <motion.div 
-            className="inline-flex items-center px-6 py-3 glass-card rounded-full text-secondary text-sm font-medium mb-8"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            whileHover={{ scale: 1.05 }}
-          >
-            <Zap className="w-4 h-4 mr-2" />
-            Tūrangawaewae of Tech – Proudly King Country Grown 🇳🇿
-          </motion.div>
-
           {/* Main Heading */}
           <div className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground mb-6 leading-tight">
             <motion.span
@@ -289,90 +273,6 @@ const Hero = ({ onBriefReady }: HeroProps) => {
             )}
           </AnimatePresence>
 
-          {/* Secondary CTA */}
-          <motion.div
-            className="mb-16"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.0, duration: 0.8 }}
-          >
-            <motion.div
-              ref={workBtn.ref as React.RefObject<HTMLDivElement>}
-              style={{ x: workBtn.x, y: workBtn.y }}
-              {...workBtn.handlers}
-              className="inline-block"
-            >
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-primary-foreground/20 backdrop-blur-sm border-2 border-primary-foreground/50 text-primary-foreground hover:bg-primary-foreground/30 hover:border-primary-foreground/70 hover:scale-105 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-glow"
-              >
-                <Play className="mr-2 w-5 h-5" />
-                See Our Work
-              </Button>
-            </motion.div>
-          </motion.div>
-
-          {/* Animated Stats */}
-          <motion.div 
-            ref={ref}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.8 }}
-          >
-            <motion.div 
-              className="text-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="flex items-center justify-center w-16 h-16 glass-card rounded-full mx-auto mb-4">
-                <Zap className="w-8 h-8 text-secondary" />
-              </div>
-              <div className="text-3xl font-bold text-primary-foreground counter-animation">
-                Piopio
-              </div>
-              <div className="text-primary-foreground/70 text-sm">
-                Based in King Country<br />
-                <span className="text-xs text-secondary">serving all of NZ remotely</span>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="text-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="flex items-center justify-center w-16 h-16 glass-card rounded-full mx-auto mb-4">
-                <Award className="w-8 h-8 text-secondary" />
-              </div>
-              <div className="text-3xl font-bold text-primary-foreground counter-animation">
-                ~14 days
-              </div>
-              <div className="text-primary-foreground/70 text-sm">
-                Typical turnaround<br />
-                <span className="text-xs text-secondary">from brief to live site</span>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              className="text-center"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="flex items-center justify-center w-16 h-16 glass-card rounded-full mx-auto mb-4">
-                <Users className="w-8 h-8 text-secondary" />
-              </div>
-              <div className="text-3xl font-bold text-primary-foreground counter-animation">
-                Direct
-              </div>
-              <div className="text-primary-foreground/70 text-sm">
-                You deal with the founder<br />
-                <span className="text-xs text-secondary">not an account manager</span>
-              </div>
-            </motion.div>
-          </motion.div>
         </motion.div>
       </div>
 

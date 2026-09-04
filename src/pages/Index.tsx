@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
+import TrustStrip from '@/components/TrustStrip';
 import About from '@/components/About';
 import Services from '@/components/Services';
 import Portfolio from '@/components/Portfolio';
@@ -34,6 +35,7 @@ const Index = () => {
     <main className="min-h-screen">
       <Navigation />
       <Hero onBriefReady={setHeroBrief} />
+      <TrustStrip />
       <About />
       <Services />
       <Portfolio />

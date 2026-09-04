@@ -328,6 +328,30 @@ const Services = () => {
           </p>
         </div>
 
+        {/* Featured product -- AI Assistant subscription, not just another line item */}
+        <a
+          href="/ai-assistant"
+          className="group flex flex-col md:flex-row items-center justify-between gap-6 mb-16 p-8 rounded-3xl bg-gradient-to-br from-primary to-primary/90 shadow-glow hover:shadow-lg transition-all duration-300"
+        >
+          <div className="text-center md:text-left">
+            <span className="inline-block px-3 py-1 rounded-full bg-secondary/20 text-secondary text-xs font-semibold mb-3">
+              NEW · MONTHLY SUBSCRIPTION
+            </span>
+            <h3 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-2">
+              AI Assistant for your existing website
+            </h3>
+            <p className="text-primary-foreground/70 max-w-md">
+              Keep the site you already have. Add an AI that answers customers 24/7 -- one flat monthly price, no quote required.
+            </p>
+          </div>
+          <div className="flex-shrink-0 text-center">
+            <div className="text-4xl font-bold text-secondary mb-1">$79<span className="text-base font-medium text-primary-foreground/60">/mo</span></div>
+            <span className="inline-flex items-center text-sm font-semibold text-primary-foreground group-hover:translate-x-1 transition-transform">
+              See how it works →
+            </span>
+          </div>
+        </a>
+
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {services.map((service) => {

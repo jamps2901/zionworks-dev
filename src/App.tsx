@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Resources from "./pages/Resources";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import AiAssistant from "./pages/AiAssistant";
 import NotFound from "./pages/NotFound";
 
 // Lazy load admin components for better performance
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/resources" element={<Resources />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/ai-assistant" element={<AiAssistant />} />
           <Route path="/client-portal" element={<ClientPortal />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/w/:slug" element={<WidgetEmbed />} />
