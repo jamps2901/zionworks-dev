@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
 import TrustStrip from '@/components/TrustStrip';
@@ -30,6 +30,32 @@ const Index = () => {
     setIsChatOpen(!isChatOpen);
     trackInteraction('chatbot', isChatOpen ? 'close' : 'open');
   };
+
+  // Other pages link here with a #section hash (e.g. /ai-assistant's "Get
+  // Started" button goes to /#contact). That's a full page load, so the
+  // browser's own hash-scroll fires before this page's sections have
+  // rendered and silently fails, landing at the top instead. A single fixed
+  // delay isn't reliable here -- how long mount actually takes varies, so
+  // poll for the target to exist instead of guessing a timeout.
+  useEffect(() => {
+    if (!window.location.hash) return;
+    const id = window.location.hash.slice(1);
+
+    let attempts = 0;
+    const maxAttempts = 40; // ~10s at 250ms, generous for a slow first load
+    const tryScroll = () => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      attempts++;
+      if (attempts < maxAttempts) {
+        setTimeout(tryScroll, 250);
+      }
+    };
+    tryScroll();
+  }, []);
 
   return (
     <main className="min-h-screen">

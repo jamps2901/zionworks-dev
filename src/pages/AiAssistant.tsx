@@ -72,7 +72,7 @@ const AiAssistant = () => {
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
               <p className="text-xs text-muted-foreground mt-3">
-                No self-serve signup yet -- get in touch and it's set up for you personally.
+                Set up personally by me, not a form -- usually live within a day or two.
               </p>
             </div>
           </motion.div>
