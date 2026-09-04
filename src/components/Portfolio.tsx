@@ -158,7 +158,7 @@ const Portfolio = () => {
       gradientClass: "from-secondary to-accent",
       category: "Live Product",
       technologies: ["React", "TypeScript", "Supabase", "AI"],
-      liveUrl: "https://shop.bartermuse.app",
+      liveUrl: "https://app.bartermuse.shop",
       isLive: true,
       detailedInfo: {
         overview: "BarterMuse is a local barter and trade platform with AI-powered value guidance, local match radar, and a full trade workspace -- built solo, from Piopio, between hive checks. It's the clearest proof of what this stack can actually ship.",

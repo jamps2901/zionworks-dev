@@ -317,7 +317,7 @@ const Services = () => {
           <p className="text-sm text-center text-muted-foreground">
             <strong className="text-foreground">Live proof:</strong>{' '}
             <a
-              href="https://shop.bartermuse.app"
+              href="https://app.bartermuse.shop"
               target="_blank"
               rel="noopener noreferrer"
               className="text-secondary underline underline-offset-2 hover:text-secondary/80 transition-colors"
