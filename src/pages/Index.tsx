@@ -41,16 +41,46 @@ const Index = () => {
     if (!window.location.hash) return;
     const id = window.location.hash.slice(1);
 
-    let attempts = 0;
-    const maxAttempts = 40; // ~10s at 250ms, generous for a slow first load
+    let findAttempts = 0;
+    const maxFindAttempts = 40; // ~10s at 250ms, generous for a slow first load
+
+    // Instant, not smooth: this is a very long, image-heavy page, and an
+    // animated smooth-scroll's target drifts under it while content below
+    // the fold is still loading in, so it never visibly completes.
+    // Even instant needs correcting repeatedly, not once -- confirmed live
+    // that a single correction (or two) still gets overtaken by continued
+    // layout shift for a few seconds after first paint. Keep correcting
+    // until position holds steady across two checks in a row.
+    const settleAndScroll = (el: HTMLElement) => {
+      let lastY = -1;
+      let stableCount = 0;
+      const maxCorrections = 20; // ~6s at 300ms
+      let corrections = 0;
+
+      const correct = () => {
+        el.scrollIntoView({ behavior: 'instant', block: 'start' });
+        if (window.scrollY === lastY) {
+          stableCount++;
+        } else {
+          stableCount = 0;
+        }
+        lastY = window.scrollY;
+        corrections++;
+        if (stableCount < 2 && corrections < maxCorrections) {
+          setTimeout(correct, 300);
+        }
+      };
+      correct();
+    };
+
     const tryScroll = () => {
       const el = document.getElementById(id);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        settleAndScroll(el);
         return;
       }
-      attempts++;
-      if (attempts < maxAttempts) {
+      findAttempts++;
+      if (findAttempts < maxFindAttempts) {
         setTimeout(tryScroll, 250);
       }
     };
